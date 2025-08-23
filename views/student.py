@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app
 from flask_login import login_required, current_user
 from viewmodels.student_viewmodel import StudentViewModel
-from datetime import date
+from datetime import date, datetime
 from werkzeug.utils import secure_filename
 import os
 from models import db
@@ -136,3 +136,31 @@ def profile():
         return redirect(url_for('student.profile'))
 
     return render_template('student/profile.html', user=current_user)
+
+@student_bp.route('/events/search')
+@login_required
+def search_events():
+    search_query = request.args.get('q', '')
+    category = request.args.get('category', 'all')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    
+    # Convert date strings to date objects if provided
+    if start_date:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+    if end_date:
+        end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+        
+    events = StudentViewModel.search_events(
+        search_query=search_query,
+        category=category,
+        start_date=start_date,
+        end_date=end_date
+    )
+    
+    return render_template('student/search_events.html',
+                         events=events,
+                         search_query=search_query,
+                         selected_category=category,
+                         start_date=start_date,
+                         end_date=end_date)

@@ -40,10 +40,32 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('student.search_events') }}">
+                        <i class="fas fa-search me-2"></i>Search Events
+                    </a>
+                </li>
             </ul>
             {% endif %}
         </div>
     </nav>
+
+    <!-- Add this search bar section right after the navbar -->
+    <div class="search-bar py-3 bg-light border-bottom">
+        <div class="container">
+            <form method="GET" action="{{ url_for('student.search_events') }}" class="d-flex justify-content-center">
+                <div class="search-wrapper" style="width: 60%;">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="q" 
+                               placeholder="Search for events..." aria-label="Search">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <main class="container mt-4">
         {% with messages = get_flashed_messages(with_categories=true) %}

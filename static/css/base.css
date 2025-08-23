@@ -53,3 +53,25 @@ body {
 .list-group-item:hover:not(.active) {
     background-color: #f8f9fa;
 }
+.search-bar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.search-wrapper .input-group {
+    transition: all 0.3s ease;
+}
+
+.search-wrapper .input-group:focus-within {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.search-wrapper .form-control {
+    border-right: none;
+    padding-left: 1rem;
+}
+.search-wrapper .btn {
+    border-left: none;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}

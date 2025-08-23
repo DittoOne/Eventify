@@ -2,7 +2,7 @@ from models.event import Event
 from models.user import User
 from models import db
 from datetime import datetime, date
-from sqlalchemy import and_
+from sqlalchemy import or_, and_
 
 class StudentViewModel:
     @staticmethod
@@ -109,3 +109,32 @@ class StudentViewModel:
                 stats['categories'][event.category] = 1
                 
         return stats
+    
+    @staticmethod
+    def search_events(search_query=None, category=None, start_date=None, end_date=None):
+        """Search and filter events"""
+        query = Event.query
+        
+        # Search by title or description
+        if search_query:
+            search = f"%{search_query}%"
+            query = query.filter(
+                or_(
+                    Event.title.ilike(search),
+                    Event.description.ilike(search),
+                    Event.location.ilike(search)
+                )
+            )
+        
+        # Filter by category
+        if category and category != 'all':
+            query = query.filter(Event.category == category)
+            
+        # Filter by date range
+        if start_date:
+            query = query.filter(Event.date >= start_date)
+        if end_date:
+            query = query.filter(Event.date <= end_date)
+            
+        # Order by date and time
+        return query.order_by(Event.date, Event.time).all()

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Search Events - Eventify{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Search Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('student.search_events') }}" class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="q" 
+                           value="{{ search_query }}" placeholder="Search events...">
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" name="category">
+                        <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All Categories</option>
+                        <option value="Academic" {% if selected_category == 'Academic' %}selected{% endif %}>Academic</option>
+                        <option value="Cultural" {% if selected_category == 'Cultural' %}selected{% endif %}>Cultural</option>
+                        <option value="Sports" {% if selected_category == 'Sports' %}selected{% endif %}>Sports</option>
+                        <option value="Technical" {% if selected_category == 'Technical' %}selected{% endif %}>Technical</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="date" class="form-control" name="start_date" 
+                           value="{{ start_date|string if start_date else '' }}" placeholder="Start Date">
+                </div>
+                <div class="col-md-2">
+                    <input type="date" class="form-control" name="end_date" 
+                           value="{{ end_date|string if end_date else '' }}" placeholder="End Date">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-2"></i>Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div class="row">
+        {% if events %}
+            {% for event in events %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ event.title }}</h5>
+                        <p class="card-text text-muted">
+                            <i class="fas fa-calendar me-2"></i>{{ event.date.strftime('%Y-%m-%d') }}
+                            <i class="fas fa-clock ms-3 me-2"></i>{{ event.time.strftime('%H:%M') }}
+                        </p>
+                        <p class="card-text">{{ event.description[:150] }}...</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-primary">{{ event.category }}</span>
+                            <a href="{{ url_for('student.event_detail', event_id=event.id) }}" 
+                               class="btn btn-outline-primary btn-sm">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No events found matching your criteria.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
