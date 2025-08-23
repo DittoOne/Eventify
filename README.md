@@ -1,0 +1,2 @@
+# Eventify
+ Hackathon app
