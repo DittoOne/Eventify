@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard - Eventify{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/student.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-user"></i> Navigation</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="{{ url_for('student.dashboard') }}" class="list-group-item list-group-item-action active">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="{{ url_for('student.events') }}" class="list-group-item list-group-item-action">
+                    <i class="fas fa-calendar"></i> All Events
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <h2>Student Dashboard</h2>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-calendar-check"></i> My Registered Events</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if registered_events %}
+                            {% for event in registered_events %}
+                            <div class="event-item mb-3 p-3 border rounded">
+                                <h6><a href="{{ url_for('student.event_detail', event_id=event.id) }}">{{ event.title }}</a></h6>
+                                <p class="mb-1"><i class="fas fa-calendar"></i> {{ event.date.strftime('%B %d, %Y') }}</p>
+                                <p class="mb-1"><i class="fas fa-clock"></i> {{ event.time.strftime('%I:%M %p') }}</p>
+                                <p class="mb-0"><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted">No registered events yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-star"></i> Upcoming Events</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if upcoming_events %}
+                            {% for event in upcoming_events %}
+                            <div class="event-item mb-3 p-3 border rounded">
+                                <h6><a href="{{ url_for('student.event_detail', event_id=event.id) }}">{{ event.title }}</a></h6>
+                                <p class="mb-1"><i class="fas fa-calendar"></i> {{ event.date.strftime('%B %d, %Y') }}</p>
+                                <p class="mb-0"><i class="fas fa-users"></i> {{ event.registration_count }}/{{ event.max_capacity }} registered</p>
+                            </div>
+                            {% endfor %}
+                            <a href="{{ url_for('student.events') }}" class="btn btn-primary btn-sm">View All Events</a>
+                        {% else %}
+                            <p class="text-muted">No upcoming events.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

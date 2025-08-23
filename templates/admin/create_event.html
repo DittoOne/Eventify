@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Create Event - Eventify{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-plus"></i> Create New Event</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Event Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select class="form-control" id="category" name="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Academic" {% if event.category == 'Academic' %}selected{% endif %}>Academic</option>
+                                    <option value="Cultural" {% if event.category == 'Cultural' %}selected{% endif %}>Cultural</option>
+                                    <option value="Sports" {% if event.category == 'Sports' %}selected{% endif %}>Sports</option>
+                                    <option value="Technical" {% if event.category == 'Technical' %}selected{% endif %}>Technical</option>
+                                    <option value="Social" {% if event.category == 'Social' %}selected{% endif %}>Social</option>
+                                    <option value="Workshop" {% if event.category == 'Workshop' %}selected{% endif %}>Workshop</option>
+                                    <option value="Seminar" {% if event.category == 'Seminar' %}selected{% endif %}>Seminar</option>
+                                    <option value="Other" {% if event.category == 'Other' %}selected{% endif %}>Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="max_capacity" class="form-label">Maximum Capacity</label>
+                                <input type="number" class="form-control" id="max_capacity" name="max_capacity" min="1" value="{{ event.max_capacity }}" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <strong>Note:</strong> This event currently has {{ event.registration_count }} registered participants.
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-save"></i> Update Event
+                        </button>
+                        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

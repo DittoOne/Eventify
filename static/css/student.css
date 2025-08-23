@@ -1,0 +1,35 @@
+.event-item {
+    transition: transform 0.2s;
+    background-color: #fff;
+}
+
+.event-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event-item h6 a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.event-item h6 a:hover {
+    text-decoration: underline;
+}
+
+.event-item p {
+    margin-bottom: 0.25rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.event-item i {
+    width: 20px;
+    color: #007bff;
+}
+
+.badge {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
+}
