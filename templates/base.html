@@ -17,14 +17,30 @@
             </a>
             
             {% if current_user.is_authenticated %}
-            <div class="navbar-nav ms-auto">
-                <span class="navbar-text me-3">
-                    Welcome, {{ current_user.username }} ({{ current_user.role.title() }})
-                </span>
-                <a class="nav-link" href="{{ url_for('auth.logout') }}">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            </div>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ current_user.profile_image_url or url_for('static', filename='img/default_profile.png') }}"
+                                alt="Profile" class="rounded-circle me-2" width="32" height="32">
+                            <span class="text-white">{{ current_user.username }}</span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('student.profile' if current_user.is_student() else 'admin.profile') }}">
+                                <i class="fas fa-user me-2"></i>Your Profile
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('auth.logout') }}">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
             {% endif %}
         </div>
     </nav>

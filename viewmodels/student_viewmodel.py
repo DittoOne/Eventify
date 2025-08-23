@@ -2,6 +2,7 @@ from models.event import Event
 from models.user import User
 from models import db
 from datetime import datetime, date
+from sqlalchemy import and_
 
 class StudentViewModel:
     @staticmethod
@@ -62,3 +63,49 @@ class StudentViewModel:
     def get_user_registered_events(user):
         """Get events user is registered for"""
         return user.registered_events
+    
+    @staticmethod
+    def get_user_upcoming_registered_events(user):
+        """Get all upcoming events that the user has registered for"""
+        now = datetime.now()
+        return [event for event in StudentViewModel.get_user_registered_events(user)
+                if datetime.combine(event.date, event.time) > now]
+    
+    @staticmethod
+    def get_ongoing_events():
+        """Get all events that are currently happening"""
+        now = datetime.now()
+        return Event.query.filter(
+            Event.date == now.date(),
+            Event.time <= now.time()
+        ).all()
+    
+    @staticmethod
+    def get_today_events():
+        """Get all events scheduled for today"""
+        today = datetime.now().date()
+        return Event.query.filter(
+            Event.date == today
+        ).order_by(Event.time).all()
+    
+    @staticmethod
+    def get_dashboard_stats(user):
+        """Get statistics for student dashboard"""
+        registered_events = StudentViewModel.get_user_registered_events(user)
+        today = datetime.now().date()
+        
+        stats = {
+            'total_registered': len(registered_events),
+            'upcoming_events': sum(1 for e in registered_events if e.date >= today),
+            'events_this_month': sum(1 for e in registered_events if e.date.month == today.month),
+            'categories': {}
+        }
+        
+        # Count events by category
+        for event in registered_events:
+            if event.category in stats['categories']:
+                stats['categories'][event.category] += 1
+            else:
+                stats['categories'][event.category] = 1
+                
+        return stats
