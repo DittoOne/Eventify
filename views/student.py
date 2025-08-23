@@ -1,6 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app
 from flask_login import login_required, current_user
 from viewmodels.student_viewmodel import StudentViewModel
+from datetime import date
+from werkzeug.utils import secure_filename
+import os
+from models import db
 
 student_bp = Blueprint('student', __name__, url_prefix='/student')
 
@@ -12,17 +16,42 @@ def require_student():
         return redirect(url_for('admin.dashboard'))
 
 @student_bp.route('/dashboard')
+@login_required
 def dashboard():
-    registered_events = StudentViewModel.get_user_registered_events(current_user)
-    upcoming_events = StudentViewModel.get_upcoming_events()[:5]  # Show 5 latest
+    registered_events = StudentViewModel.get_user_upcoming_registered_events(current_user)
+    upcoming_events = StudentViewModel.get_upcoming_events()[:6]  # Show 6 latest
+    ongoing_events = StudentViewModel.get_ongoing_events()
+    today_events = StudentViewModel.get_today_events()
+    stats = StudentViewModel.get_dashboard_stats(current_user)
+    
     return render_template('student/dashboard.html', 
                          registered_events=registered_events,
-                         upcoming_events=upcoming_events)
+                         upcoming_events=upcoming_events,
+                         ongoing_events=ongoing_events,
+                         today_events=today_events,
+                         stats=stats)
 
 @student_bp.route('/events')
 def events():
-    upcoming_events = StudentViewModel.get_upcoming_events()
-    return render_template('student/events.html', events=upcoming_events)
+    # Get filter parameters
+    category = request.args.get('category', '')
+    search = request.args.get('search', '')
+    status = request.args.get('status', '')
+    
+    if search:
+        upcoming_events = StudentViewModel.search_events(search)
+    elif category:
+        upcoming_events = StudentViewModel.get_events_by_category(category)
+    elif status == 'ongoing':
+        upcoming_events = StudentViewModel.get_ongoing_events()
+    elif status == 'today':
+        upcoming_events = StudentViewModel.get_today_events()
+    else:
+        upcoming_events = StudentViewModel.get_upcoming_events()
+    
+    return render_template('student/events.html', 
+                         events=upcoming_events,
+                         today=date.today())
 
 @student_bp.route('/event/<int:event_id>')
 def event_detail(event_id):
@@ -51,3 +80,59 @@ def unregister_event(event_id):
     
     flash(message, 'success' if success else 'error')
     return redirect(url_for('student.event_detail', event_id=event_id))
+
+@student_bp.route('/my-events')
+def my_events():
+    upcoming_events = StudentViewModel.get_user_upcoming_registered_events(current_user)
+    past_events = StudentViewModel.get_user_past_registered_events(current_user)
+    
+    return render_template('student/my_events.html',
+                         upcoming_events=upcoming_events,
+                         past_events=past_events)
+
+@student_bp.route('/ongoing-events')
+def ongoing_events():
+    ongoing_events = StudentViewModel.get_ongoing_events()
+    return render_template('student/ongoing_events.html',
+                         events=ongoing_events)
+
+@student_bp.route('/api/event-status/<int:event_id>')
+def event_status_api(event_id):
+    """API endpoint to get real-time event status"""
+    try:
+        event = StudentViewModel.get_event_by_id(event_id)
+        return jsonify({
+            'success': True,
+            'status': {
+                'is_ongoing': event.is_ongoing,
+                'is_past': event.is_past,
+                'registration_count': event.registration_count,
+                'is_full': event.is_full
+            }
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': str(e)
+        }), 404
+
+@student_bp.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    if request.method == 'POST':
+        if 'profile_image' in request.files:
+            file = request.files['profile_image']
+            if file.filename != '':
+                filename = secure_filename(file.filename)
+                upload_folder = os.path.join(current_app.root_path, 'static/uploads')
+                os.makedirs(upload_folder, exist_ok=True)
+                file.save(os.path.join(upload_folder, filename))
+                current_user.profile_image = f'/static/uploads/{filename}'
+
+        current_user.username = request.form['username']
+        current_user.email = request.form['email']
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('student.profile'))
+
+    return render_template('student/profile.html', user=current_user)
