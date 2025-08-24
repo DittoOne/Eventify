@@ -25,32 +25,38 @@ def dashboard():
 @admin_bp.route('/create-event', methods=['GET', 'POST'])
 def create_event():
     if request.method == 'POST':
-        title = request.form['title']
-        description = request.form['description']
+        title = request.form.get('title', '')
+        description = request.form.get('description', '')
+        start_date_str = request.form.get('start_date', '')
+        end_date_str = request.form.get('end_date', '')
+        start_time_str = request.form.get('start_time', '')
+        end_time_str = request.form.get('end_time', '')
+        location = request.form.get('location', '')
+        category = request.form.get('category', '')
+        max_capacity = request.form.get('max_capacity', '0')
         
-        # Parse start date and time
-        start_date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
-        start_time = datetime.strptime(request.form['time'], '%H:%M').time()
-        
-        # Parse end date and time
-        end_date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
-        end_time = datetime.strptime(request.form['time'], '%H:%M').time()
-        
-        location = request.form['location']
-        category = request.form['category']
-        max_capacity = int(request.form['max_capacity'])
-        
+        # Validate required fields
+        if not (title and description and start_date_str and end_date_str and start_time_str and end_time_str and location and category and max_capacity):
+            flash('All fields are required.', 'error')
+            return render_template('admin/create_event.html', event=request.form)
+
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+        start_time = datetime.strptime(start_time_str, '%H:%M').time()
+        end_time = datetime.strptime(end_time_str, '%H:%M').time()
+        max_capacity = int(max_capacity)
+
         success, message = AdminViewModel.create_event(
-            title, description, start_date, start_time,
-            location, category, max_capacity, current_user
+            title, description, start_date, start_time, 
+            end_date, end_time, location, category, max_capacity, current_user
         )
-        
+
         flash(message, 'success' if success else 'error')
-        
+
         if success:
             return redirect(url_for('admin.dashboard'))
     
-    return render_template('admin/create_event.html')
+    return render_template('admin/create_event.html',event={})
 
 @admin_bp.route('/edit-event/<int:event_id>', methods=['GET', 'POST'])
 def edit_event(event_id):
@@ -62,24 +68,31 @@ def edit_event(event_id):
         return redirect(url_for('admin.dashboard'))
     
     if request.method == 'POST':
-        title = request.form['title']
-        description = request.form['description']
-        
-        # Parse start date and time
-        start_date = datetime.strptime(request.form['start_date'], '%Y-%m-%d').date()
-        start_time = datetime.strptime(request.form['start_time'], '%H:%M').time()
-        
-        # Parse end date and time
-        end_date = datetime.strptime(request.form['end_date'], '%Y-%m-%d').date()
-        end_time = datetime.strptime(request.form['end_time'], '%H:%M').time()
-        
-        location = request.form['location']
-        category = request.form['category']
-        max_capacity = int(request.form['max_capacity'])
+        title = request.form.get('title', '')
+        id=request.form.get('event_id','')
+        description = request.form.get('description', '')
+        start_date_str = request.form.get('start_date', '')
+        end_date_str = request.form.get('end_date', '')
+        start_time_str = request.form.get('start_time', '')
+        end_time_str = request.form.get('end_time', '')
+        location = request.form.get('location', '')
+        category = request.form.get('category', '')
+        max_capacity = request.form.get('max_capacity', '0')
+
+        # Validate required fields
+        if not (title and description and start_date_str and end_date_str and start_time_str and end_time_str and location and category and max_capacity):
+            flash('All fields are required.', 'error')
+            return render_template('admin/create_event.html', event=request.form)
+
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+        start_time = datetime.strptime(start_time_str, '%H:%M').time()
+        end_time = datetime.strptime(end_time_str, '%H:%M').time()
+        max_capacity = int(max_capacity)
         
         success, message = AdminViewModel.update_event(
-            event_id, title, description, start_date, start_time, 
-            location, category, max_capacity
+            id , title,description, start_date, start_time,end_date,
+            end_time, location, category, max_capacity, current_user
         )
         
         flash(message, 'success' if success else 'error')
@@ -155,15 +168,15 @@ def search_events():
     if selected_category != 'all':
         query = query.filter(Event.category == selected_category)
     if start_date:
-        query = query.filter(Event.date >= datetime.strptime(start_date, '%Y-%m-%d'))
+        query = query.filter(Event.start_date >= datetime.strptime(start_date, '%Y-%m-%d'))
     if end_date:
-        query = query.filter(Event.date <= datetime.strptime(end_date, '%Y-%m-%d'))
+        query = query.filter(Event.end_date <= datetime.strptime(end_date, '%Y-%m-%d'))
     if location:
         query = query.filter(Event.location.ilike(f'%{location}%'))
     if time:
-        query = query.filter(Event.time.ilike(f'%{time}%'))
+        query = query.filter(Event.start_time.ilike(f'%{time}%'))
 
-    events = query.order_by(Event.date.desc()).all()
+    events = query.order_by(Event.start_date.desc()).all()
 
     return render_template('search_events.html',
                          events=events,
@@ -172,7 +185,7 @@ def search_events():
                          start_date=start_date,
                          end_date=end_date,
                          location=location,
-                         time=time,
+                         start_time=time,
                          user_type='admin')
 
 @admin_bp.route('/event/<int:event_id>')

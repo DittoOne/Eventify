@@ -9,7 +9,7 @@ class StudentViewModel:
     def get_upcoming_events():
         """Get all upcoming events"""
         today = date.today()
-        return Event.query.filter(Event.date >= today).order_by(Event.date, Event.time).all()
+        return Event.query.filter(Event.start_date >= today).order_by(Event.start_date, Event.start_time).all()
     
     @staticmethod
     def get_event_by_id(event_id):
@@ -69,15 +69,15 @@ class StudentViewModel:
         """Get all upcoming events that the user has registered for"""
         now = datetime.now()
         return [event for event in StudentViewModel.get_user_registered_events(user)
-                if datetime.combine(event.date, event.time) > now]
+                if datetime.combine(event.start_date, event.start_time) > now]
     
     @staticmethod
     def get_ongoing_events():
         """Get all events that are currently happening"""
         now = datetime.now()
         return Event.query.filter(
-            Event.date == now.date(),
-            Event.time <= now.time()
+            Event.start_date == now.date(),
+            Event.start_time <= now.time()
         ).all()
     
     @staticmethod
@@ -85,8 +85,8 @@ class StudentViewModel:
         """Get all events scheduled for today"""
         today = datetime.now().date()
         return Event.query.filter(
-            Event.date == today
-        ).order_by(Event.time).all()
+            Event.start_date == today
+        ).order_by(Event.start_time).all()
     
     @staticmethod
     def get_dashboard_stats(user):
@@ -96,8 +96,8 @@ class StudentViewModel:
         
         stats = {
             'total_registered': len(registered_events),
-            'upcoming_events': sum(1 for e in registered_events if e.date >= today),
-            'events_this_month': sum(1 for e in registered_events if e.date.month == today.month),
+            'upcoming_events': sum(1 for e in registered_events if e.start_date >= today),
+            'events_this_month': sum(1 for e in registered_events if e.start_date.month == today.month),
             'categories': {}
         }
         
@@ -132,9 +132,9 @@ class StudentViewModel:
             
         # Filter by date range
         if start_date:
-            query = query.filter(Event.date >= start_date)
+            query = query.filter(Event.start_date >= start_date)
         if end_date:
-            query = query.filter(Event.date <= end_date)
+            query = query.filter(Event.start_date <= end_date)
             
         # Order by date and time
-        return query.order_by(Event.date, Event.time).all()
+        return query.order_by(Event.start_date, Event.start_time).all()

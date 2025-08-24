@@ -14,8 +14,10 @@ class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    date = db.Column(db.Date, nullable=False)
-    time = db.Column(db.Time, nullable=False)
+    start_date = db.Column(db.Date, nullable=False)
+    start_time = db.Column(db.Time, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
+    end_time = db.Column(db.Time, nullable=False)
     location = db.Column(db.String(200), nullable=False)
     category = db.Column(db.String(100), nullable=False)
     max_capacity = db.Column(db.Integer, default=100)
@@ -38,5 +40,5 @@ class Event(db.Model):
     @property
     def is_past(self):
         from datetime import datetime, date
-        event_datetime = datetime.combine(self.date, self.time)
+        event_datetime = datetime.combine(self.start_date, self.start_time)
         return event_datetime < datetime.now()

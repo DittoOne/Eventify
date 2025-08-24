@@ -62,9 +62,9 @@
                                value="{{ location if location else '' }}" placeholder="Enter location">
                     </div>
                     <div class="col-md-2">
-                        <label class="form-label">Time</label>
-                        <input type="time" class="form-control" name="time" 
-                               value="{{ time if time else '' }}">
+                        <label class="form-label">Start Time</label>
+                        <input type="time" class="form-control" name="start_time" 
+                               value="{{ start_time if start_time else '' }}">
                     </div>
                     <div class="col-md-1 d-flex align-items-end">
                         <button type="submit" class="btn btn-outline-primary w-100">
@@ -104,9 +104,9 @@
                             {% endif %}
                         </h5>
                         <p class="card-text text-muted mb-3 event-info">
-                            <i class="fas fa-calendar me-2"></i>{{ event.date.strftime('%B %d, %Y') }}
+                            <i class="fas fa-calendar me-2"></i>{{ event.start_date.strftime('%B %d, %Y') }}
                             <br>
-                            <i class="fas fa-clock me-2"></i>{{ event.time.strftime('%I:%M %p') }}
+                            <i class="fas fa-clock me-2"></i>{{ event.start_time.strftime('%I:%M %p') }}
                             <br>
                             <i class="fas fa-map-marker-alt me-2"></i>{{ event.location }}
                             {% if user_type == 'admin' and event.creator == current_user %}
