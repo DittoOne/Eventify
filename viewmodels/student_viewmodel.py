@@ -3,6 +3,8 @@ from models.user import User
 from models import db
 from datetime import datetime, date
 from sqlalchemy import or_, and_
+# Fix the import - use the correct module name
+from models import reccomendation_engine
 
 class StudentViewModel:
     @staticmethod
@@ -72,6 +74,13 @@ class StudentViewModel:
                 if datetime.combine(event.start_date, event.start_time) > now]
     
     @staticmethod
+    def get_user_past_registered_events(user):
+        """Get all past events that the user was registered for"""
+        now = datetime.now()
+        return [event for event in StudentViewModel.get_user_registered_events(user)
+                if datetime.combine(event.date, event.time) <= now]
+    
+    @staticmethod
     def get_ongoing_events():
         """Get all events that are currently happening"""
         now = datetime.now()
@@ -111,6 +120,15 @@ class StudentViewModel:
         return stats
     
     @staticmethod
+    def get_events_by_category(category):
+        """Get events filtered by category"""
+        today = date.today()
+        return Event.query.filter(
+            Event.date >= today,
+            Event.category == category
+        ).order_by(Event.date, Event.time).all()
+    
+    @staticmethod
     def search_events(search_query=None, category=None, start_date=None, end_date=None):
         """Search and filter events"""
         query = Event.query
@@ -138,3 +156,60 @@ class StudentViewModel:
             
         # Order by date and time
         return query.order_by(Event.start_date, Event.start_time).all()
+        return query.order_by(Event.date, Event.time).all()
+    
+    # Enhanced recommendation methods with debugging
+    @staticmethod
+    def get_user_recommendations(user, limit=5):
+        """Get personalized recommendations for user with debugging"""
+        try:
+            print(f"Getting recommendations for user: {user.username}")
+            print(f"User registered events: {[e.title for e in user.registered_events]}")
+            
+            recommendations = reccomendation_engine.get_user_recommendations(user, limit)
+            
+            print(f"Generated {len(recommendations)} recommendations:")
+            for i, rec in enumerate(recommendations):
+                print(f"{i+1}. {rec['event'].title} - Score: {rec['score']:.3f} - {rec['reason']}")
+            
+            return recommendations
+        except Exception as e:
+            print(f"Error getting recommendations: {e}")
+            # Fallback: return some upcoming events
+            return StudentViewModel._get_fallback_recommendations(user, limit)
+    
+    @staticmethod
+    def get_trending_events(limit=10):
+        """Get trending events with debugging"""
+        try:
+            trending = reccomendation_engine.get_trending_events(limit)
+            print(f"Generated {len(trending)} trending events")
+            return trending
+        except Exception as e:
+            print(f"Error getting trending events: {e}")
+            # Fallback: return recent events
+            upcoming_events = Event.query.filter(
+                Event.date >= date.today()
+            ).order_by(Event.date).limit(limit).all()
+            
+            return [{'event': event, 'registration_count': len(event.registered_users)} 
+                   for event in upcoming_events]
+    
+    @staticmethod
+    def _get_fallback_recommendations(user, limit):
+        """Fallback recommendations when main system fails"""
+        # Get events user hasn't registered for
+        user_event_ids = [e.id for e in user.registered_events]
+        
+        from sqlalchemy import not_
+        
+        upcoming_events = Event.query.filter(
+            Event.date >= date.today(),
+            not_(Event.id.in_(user_event_ids)) if user_event_ids else True
+        ).order_by(Event.date).limit(limit).all()
+        
+        return [{
+            'event': event,
+            'score': 0.5,
+            'reason': 'Upcoming event you might like'
+        } for event in upcoming_events]

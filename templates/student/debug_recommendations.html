@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Debug Recommendations - Eventify{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Recommendation System Debug</h2>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Your Registered Events ({{ debug_info.user_events|length }})</h5>
+                </div>
+                <div class="card-body">
+                    {% for event in debug_info.user_events %}
+                    <div class="mb-2 p-2 border-left border-primary">
+                        <strong>{{ event.title }}</strong><br>
+                        <small>Category: {{ event.category }} | Date: {{ event.date.strftime('%Y-%m-%d') }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Available Events for Recommendation ({{ debug_info.available_events|length }})</h5>
+                </div>
+                <div class="card-body">
+                    {% for event in debug_info.available_events %}
+                    <div class="mb-2 p-2 border-left border-success">
+                        <strong>{{ event.title }}</strong><br>
+                        <small>Category: {{ event.category }} | Date: {{ event.date.strftime('%Y-%m-%d') }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Generated Recommendations</h5>
+                </div>
+                <div class="card-body">
+                    {% if debug_info.recommendation_error %}
+                    <div class="alert alert-danger">
+                        Error: {{ debug_info.recommendation_error }}
+                    </div>
+                    {% elif debug_info.recommendations %}
+                        {% for rec in debug_info.recommendations %}
+                        <div class="mb-3 p-3 border rounded">
+                            <strong>{{ rec.event.title }}</strong><br>
+                            <small class="text-muted">{{ rec.reason }}</small><br>
+                            <span class="badge badge-info">Score: {{ "%.3f"|format(rec.score) }}</span>
+                            <span class="badge badge-secondary">{{ rec.event.category }}</span>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <div class="alert alert-warning">
+                        No recommendations generated
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Trending Events</h5>
+                </div>
+                <div class="card-body">
+                    {% if debug_info.trending_error %}
+                    <div class="alert alert-danger">
+                        Error: {{ debug_info.trending_error }}
+                    </div>
+                    {% elif debug_info.trending %}
+                        {% for trend in debug_info.trending %}
+                        <div class="mb-2 p-2 border-left border-warning">
+                            <strong>{{ trend.event.title }}</strong><br>
+                            <small>{{ trend.registration_count }} registrations</small>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <div class="alert alert-warning">
+                        No trending events found
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>System Status</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Total upcoming events:</strong> {{ debug_info.upcoming_events_count }}</p>
+                    <p><strong>Your registered events:</strong> {{ debug_info.user_events|length }}</p>
+                    <p><strong>Available for recommendation:</strong> {{ debug_info.available_events|length }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-4">
+        <a href="{{ url_for('student.dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+        <button onclick="window.location.reload()" class="btn btn-secondary">Refresh Debug</button>
+    </div>
+</div>
+{% endblock %}
