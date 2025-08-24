@@ -4,7 +4,7 @@ from datetime import datetime, date
 
 class AdminViewModel:
     @staticmethod
-    def create_event(title, description, start_date, start_time, end_date, end_time, location, category, max_capacity, creator):
+    def create_event(title, description, start_date, start_time, end_date, end_time, location, category, max_capacity, creator,images,documents):
         """Create a new event"""
         
         try:
@@ -25,7 +25,9 @@ class AdminViewModel:
                 location=location,
                 category=category,
                 max_capacity=max_capacity,
-                creator=creator
+                creator=creator,
+                images=images,
+                documents=documents
             )
 
             db.session.add(event)
@@ -44,7 +46,7 @@ class AdminViewModel:
         return Event.query.filter_by(creator=admin_user).order_by(Event.start_date.desc()).all()
     
     @staticmethod
-    def update_event(event_id, title, description, start_date, start_time, end_date, end_time, location, category, max_capacity, creator):
+    def update_event(event_id, title, description, start_date, start_time, end_date, end_time, location, category, max_capacity,images,documents):
         """Update an existing event"""
         try:
             start_date = datetime.strptime(start_date, "%Y-%m-%d").date() if isinstance(start_date, str) else start_date
@@ -64,6 +66,9 @@ class AdminViewModel:
             event.category = category
             event.max_capacity = max_capacity
             event.updated_at = datetime.utcnow()
+            event.images = images
+            event.documents = documents
+            
             
             db.session.commit()
             

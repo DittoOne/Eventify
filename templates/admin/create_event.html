@@ -15,8 +15,12 @@
                 <h4 class="mb-0"><i class="fas fa-plus me-2"></i> Create New Event</h4>
             </div>
             <div class="card-body">
+<<<<<<< HEAD
                 <form method="POST">
                     <!-- Event Title -->
+=======
+                <form method="POST" enctype="multipart/form-data">
+>>>>>>> cd4bcf5f98902fe40991a8b7fe853094ddbc6b87
                     <div class="mb-3">
                         <label for="title" class="form-label">Event Title</label>
                         <input type="text" class="form-control" id="title" name="title" required>
@@ -75,8 +79,49 @@
                             <input type="number" class="form-control" id="max_capacity" name="max_capacity" min="1" required>
                         </div>
                     </div>
+<<<<<<< HEAD
 
                     <!-- Buttons -->
+=======
+                    
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select class="form-control" id="category" name="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Academic">Academic</option>
+                                    <option value="Cultural">Cultural</option>
+                                    <option value="Sports">Sports</option>
+                                    <option value="Technical">Technical</option>
+                                    <option value="Social">Social</option>
+                                    <option value="Workshop">Workshop</option>
+                                    <option value="Seminar">Seminar</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="max_capacity" class="form-label">Maximum Capacity</label>
+                                <input type="number" class="form-control" id="max_capacity" name="max_capacity" min="1" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Images -->
+                    <div class="mb-3">
+                        <label for="images" class="form-label">Event Images</label>
+                        <input type="file" class="form-control" id="images" name="images" multiple accept="image/*">
+                    </div>
+                    <!-- Documents -->
+                    <div class="mb-3">
+                        <label for="documents" class="form-label">Event Documents (PDF)</label>
+                        <input type="file" class="form-control" id="documents" name="documents" multiple accept=".pdf">
+                    </div>
+
+>>>>>>> cd4bcf5f98902fe40991a8b7fe853094ddbc6b87
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-1"></i> Create Event
