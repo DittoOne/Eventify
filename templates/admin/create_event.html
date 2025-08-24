@@ -3,6 +3,8 @@
 
 {% block extra_css %}
 <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+<script src="../../static/js/tinymce/tinymce.min.js"></script>
+<script src="../../static/js/tinyMCEinit.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -21,7 +23,7 @@
                     
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                        <textarea class="form-control" id="course-description" name="description" rows="4" required></textarea>
                     </div>
                     
                     <!-- Add location field after description -->
