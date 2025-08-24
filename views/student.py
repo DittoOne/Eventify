@@ -5,6 +5,8 @@ from datetime import date, datetime
 from werkzeug.utils import secure_filename
 import os
 from models import db
+from models.event import Event
+from sqlalchemy import not_
 
 student_bp = Blueprint('student', __name__, url_prefix='/student')
 
@@ -15,21 +17,28 @@ def require_student():
         flash('Access denied. Students only.', 'error')
         return redirect(url_for('admin.dashboard'))
 
+# Single dashboard route with recommendation features
 @student_bp.route('/dashboard')
 @login_required
 def dashboard():
     registered_events = StudentViewModel.get_user_upcoming_registered_events(current_user)
-    upcoming_events = StudentViewModel.get_upcoming_events()[:6]  # Show 6 latest
+    upcoming_events = StudentViewModel.get_upcoming_events()[:6]
     ongoing_events = StudentViewModel.get_ongoing_events()
     today_events = StudentViewModel.get_today_events()
     stats = StudentViewModel.get_dashboard_stats(current_user)
+    
+    # Add recommendations
+    recommendations = StudentViewModel.get_user_recommendations(current_user, 5)
+    trending_events = StudentViewModel.get_trending_events(5)
     
     return render_template('student/dashboard.html', 
                          registered_events=registered_events,
                          upcoming_events=upcoming_events,
                          ongoing_events=ongoing_events,
                          today_events=today_events,
-                         stats=stats)
+                         stats=stats,
+                         recommendations=recommendations,
+                         trending_events=trending_events)
 
 @student_bp.route('/events')
 def events():
@@ -144,7 +153,7 @@ def search_events():
     category = request.args.get('category', 'all')
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
-    location = request.args.get('location', '')  # নতুন
+    location = request.args.get('location', '')
     time = request.args.get('time', '') 
     
     # Convert date strings to date objects if provided
@@ -166,6 +175,57 @@ def search_events():
                           selected_category=category,
                           start_date=start_date,
                           end_date=end_date,
-                          location=location,      # নতুন
-                          time=time,             # নতুন
+                          location=location,      
+                          time=time,             
                           user_type='student')
+
+@student_bp.route('/recommendations')
+@login_required
+def recommendations():
+    """Dedicated recommendations page"""
+    user_recommendations = StudentViewModel.get_user_recommendations(current_user, 10)
+    trending_events = StudentViewModel.get_trending_events(10)
+    
+    return render_template('student/recommendations.html',
+                         recommendations=user_recommendations,
+                         trending_events=trending_events)
+
+@student_bp.route('/debug-recommendations')
+@login_required
+def debug_recommendations():
+    """Debug route to check recommendation system"""
+    
+    # Get some test data
+    debug_info = {
+        'user_events': current_user.registered_events,
+        'upcoming_events_count': len(StudentViewModel.get_upcoming_events()),
+        'available_events': [],
+        'recommendations': [],
+        'trending': []
+    }
+    
+    # Get events user hasn't registered for
+    user_event_ids = [e.id for e in current_user.registered_events]
+    if user_event_ids:
+        available_events = Event.query.filter(
+            Event.date >= date.today(),
+            not_(Event.id.in_(user_event_ids))
+        ).limit(10).all()
+    else:
+        available_events = Event.query.filter(
+            Event.date >= date.today()
+        ).limit(10).all()
+    
+    debug_info['available_events'] = available_events
+    
+    try:
+        debug_info['recommendations'] = StudentViewModel.get_user_recommendations(current_user, 5)
+    except Exception as e:
+        debug_info['recommendation_error'] = str(e)
+    
+    try:
+        debug_info['trending'] = StudentViewModel.get_trending_events(5)
+    except Exception as e:
+        debug_info['trending_error'] = str(e)
+    
+    return render_template('student/debug_recommendations.html', debug_info=debug_info)

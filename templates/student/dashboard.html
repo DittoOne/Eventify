@@ -74,8 +74,53 @@
             </form>
         </div>
     </div>
+<!--reccomendation system -->
+<div class="row mt-4 mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-magic"></i> Recommended For You</h5>
+            </div>
+            <div class="card-body">
+                {% if recommendations %}
+                    {% for rec in recommendations %}
+                    <div class="recommendation-item mb-1 p-2 border-left border-primary">
+                        <h6><a href="{{ url_for('student.event_detail', event_id=rec.event.id) }}">{{ rec.event.title }}</a></h6>
+                        <small class="text-muted">{{ rec.reason }}</small>
+                        <div class="d-flex justify-content-between">
+                            <span class="badge badge-info">{{ rec.event.category }}</span>
+                            <small>{{ rec.event.date.strftime('%b %d') }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <a href="{{ url_for('student.recommendations') }}" class="btn btn-sm btn-outline-primary">View All Recommendations</a>
+                {% else %}
+                    <p class="text-muted">Register for some events to get personalized recommendations!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-fire"></i> Trending Events</h5>
+            </div>
+            <div class="card-body">
+                {% for trend in trending_events %}
+                <div class="trending-item mb-2">
+                    <a href="{{ url_for('student.event_detail', event_id=trend.event.id) }}">{{ trend.event.title }}</a>
+                    <small class="text-success d-block">{{ trend.registration_count }} recent registrations</small>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
-    <div class="col-md-3">
+    <h2>Student Dashboard</h2>
+    <div class="col-md-3 pt-2">
+        
         <div class="card">
             <div class="card-header">
                 <h5><i class="fas fa-user"></i> Navigation</h5>
@@ -90,12 +135,15 @@
                 <a href="{{ url_for('student.search_events') }}" class="list-group-item list-group-item-action">
                     <i class="fas fa-search"></i> Search Events
                 </a>
+                <a href="{{ url_for('student.debug_recommendations') }}" class="list-group-item list-group-item-action text-warning">
+                    <i class="fas fa-bug"></i> Debug Recommendations
+                </a>   
             </div>
         </div>
     </div>
     
     <div class="col-md-9">
-        <h2>Student Dashboard</h2>
+        
         
         <div class="row">
             <div class="col-md-6">

@@ -40,3 +40,14 @@ class Event(db.Model):
         from datetime import datetime, date
         event_datetime = datetime.combine(self.date, self.time)
         return event_datetime < datetime.now()
+    
+    @property
+    def is_ongoing(self):
+        """Check if event is currently happening"""
+        now = datetime.now()
+        event_datetime = datetime.combine(self.date, self.time)
+        
+        # Assume events last 2 hours (you can adjust this)
+        event_end = event_datetime.replace(hour=event_datetime.hour + 2)
+        
+        return event_datetime <= now <= event_end

@@ -28,19 +28,18 @@ def create_event():
         description = request.form['description']
         
         # Parse start date and time
-        start_date = datetime.strptime(request.form['start_date'], '%Y-%m-%d').date()
-        start_time = datetime.strptime(request.form['start_time'], '%H:%M').time()
+        date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
         
         # Parse end date and time
-        end_date = datetime.strptime(request.form['end_date'], '%Y-%m-%d').date()
-        end_time = datetime.strptime(request.form['end_time'], '%H:%M').time()
+        
+        time = datetime.strptime(request.form['time'], '%H:%M').time()
         
         location = request.form['location']
         category = request.form['category']
         max_capacity = int(request.form['max_capacity'])
         
         success, message = AdminViewModel.create_event(
-            title, description, start_date, start_time, end_date, end_time,
+            title, description, date, time, 
             location, category, max_capacity, current_user
         )
         
@@ -66,19 +65,15 @@ def edit_event(event_id):
         description = request.form['description']
         
         # Parse start date and time
-        start_date = datetime.strptime(request.form['start_date'], '%Y-%m-%d').date()
-        start_time = datetime.strptime(request.form['start_time'], '%H:%M').time()
-        
-        # Parse end date and time
-        end_date = datetime.strptime(request.form['end_date'], '%Y-%m-%d').date()
-        end_time = datetime.strptime(request.form['end_time'], '%H:%M').time()
+        date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
+        time = datetime.strptime(request.form['time'], '%H:%M').time()
         
         location = request.form['location']
         category = request.form['category']
         max_capacity = int(request.form['max_capacity'])
         
         success, message = AdminViewModel.update_event(
-            event_id, title, description, start_date, start_time, end_date, end_time,
+            event_id, title, description, date, time, 
             location, category, max_capacity
         )
         
