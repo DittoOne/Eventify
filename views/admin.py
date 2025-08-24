@@ -192,3 +192,11 @@ def search_events():
 def event_detail(event_id):
     event = Event.query.get_or_404(event_id)
     return render_template('admin/event_detail.html', event=event)
+#certificate routes
+@admin_bp.route('/event/<int:event_id>/generate-certificates', methods=['POST'])
+@login_required
+def generate_event_certificates(event_id):
+    """Generate certificates for all event participants"""
+    success, message = CertificateViewModel.generate_certificates_for_event(event_id)
+    flash(message, 'success' if success else 'error')
+    return redirect(url_for('admin.event_detail', event_id=event_id))

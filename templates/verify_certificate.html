@@ -1,0 +1,54 @@
+<!-- templates/verify_certificate.html -->
+{% extends "base.html" %}
+{% block title %}Certificate Verification - Eventify{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3><i class="fas fa-shield-alt"></i> Certificate Verification</h3>
+                </div>
+                <div class="card-body text-center">
+                    {% if result.valid %}
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle fa-5x text-success"></i>
+                    </div>
+                    <h4 class="text-success">Valid Certificate</h4>
+                    <div class="alert alert-success">
+                        <h5>Certificate Details</h5>
+                        <hr>
+                        <p><strong>Participant:</strong> {{ result.participant }}</p>
+                        <p><strong>Event:</strong> {{ result.event }}</p>
+                        <p><strong>Event Date:</strong> {{ result.event_date.strftime('%B %d, %Y') }}</p>
+                        <p><strong>Certificate Issued:</strong> {{ result.date_issued.strftime('%B %d, %Y') }}</p>
+                        <p><strong>Certificate ID:</strong> {{ certificate_id }}</p>
+                    </div>
+                    {% else %}
+                    <div class="mb-4">
+                        <i class="fas fa-times-circle fa-5x text-danger"></i>
+                    </div>
+                    <h4 class="text-danger">Invalid Certificate</h4>
+                    <div class="alert alert-danger">
+                        <p>The certificate ID <strong>{{ certificate_id }}</strong> could not be verified.</p>
+                        <p>This may indicate:</p>
+                        <ul class="text-start">
+                            <li>The certificate ID is incorrect</li>
+                            <li>The certificate has not been issued</li>
+                            <li>The certificate may be fraudulent</li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-center">
+                    <small class="text-muted">
+                        Verification powered by Eventify • 
+                        <a href="{{ url_for('index') }}">Return to Home</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -101,6 +101,32 @@
             </div>
         </div>
     </div>
+    <!-- Add to templates/student/event_detail.html -->
+    <!-- Add this in the event information sidebar -->
+    {% if event.is_past and is_registered %}
+    <div class="card mt-3">
+        <div class="card-header">
+            <h6><i class="fas fa-certificate text-warning"></i> Certificate</h6>
+        </div>
+        <div class="card-body">
+            {% set user_certificate = current_user.certificates|selectattr('event_id', 'equalto', event.id)|first %}
+            {% if user_certificate %}
+            <p class="text-success">
+                <i class="fas fa-check-circle"></i> Certificate available!
+            </p>
+            <a href="{{ url_for('student.download_certificate', certificate_id=user_certificate.certificate_id) }}" 
+            class="btn btn-success btn-sm">
+                <i class="fas fa-download"></i> Download
+            </a>
+            {% else %}
+            <p class="text-muted">
+                <i class="fas fa-clock"></i> Certificate being generated...
+            </p>
+            <small>Certificates are automatically generated after events end.</small>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
 
