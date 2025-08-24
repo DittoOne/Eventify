@@ -7,37 +7,37 @@
 
 {% block content %}
 <div class="row">
+    <!-- Event Main Info -->
     <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h3>{{ event.title }}</h3>
-                <span class="badge bg-primary">{{ event.category }}</span>
+        <div class="glass-card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h3 class="mb-0">{{ event.title }}</h3>
+                <span class="badge bg-primary fs-6">{{ event.category }}</span>
             </div>
+            
             <div class="card-body">
-                <p class="card-text">{{ event.description }}</p>
+                <p class="lead">{{ event.description }}</p>
                 
-                <div class="row">
+                <!-- Event Details -->
+                <div class="row g-4">
                     <div class="col-md-6">
-                        <h6><i class="fas fa-calendar"></i>Start Date & Time</h6>
+                        <h6 class="text-uppercase text-muted small"><i class="fas fa-calendar me-2"></i>Start Date & Time</h6>
                         <p>{{ event.start_date.strftime('%B %d, %Y') }} at {{ event.start_time.strftime('%I:%M %p') }}</p>
                     </div>
                     <div class="col-md-6">
-                        <h6><i class="fas fa-calendar"></i>End Date & Time</h6>
+                        <h6 class="text-uppercase text-muted small"><i class="fas fa-calendar-alt me-2"></i>End Date & Time</h6>
                         <p>{{ event.end_date.strftime('%B %d, %Y') }} at {{ event.end_time.strftime('%I:%M %p') }}</p>
                     </div>
                     <div class="col-md-6">
-                        <h6><i class="fas fa-map-marker-alt"></i> Location</h6>
+                        <h6 class="text-uppercase text-muted small"><i class="fas fa-map-marker-alt me-2"></i>Location</h6>
                         <p>{{ event.location }}</p>
                     </div>
-                </div>
-                
-                <div class="row">
                     <div class="col-md-6">
-                        <h6><i class="fas fa-user"></i> Organizer</h6>
+                        <h6 class="text-uppercase text-muted small"><i class="fas fa-user me-2"></i>Organizer</h6>
                         <p>{{ event.creator.username }}</p>
                     </div>
                     <div class="col-md-6">
-                        <h6><i class="fas fa-users"></i> Capacity</h6>
+                        <h6 class="text-uppercase text-muted small"><i class="fas fa-users me-2"></i>Capacity</h6>
                         <p>{{ event.registration_count }}/{{ event.max_capacity }} registered</p>
                         {% if event.is_full %}
                             <span class="badge bg-danger">Event Full</span>
@@ -46,16 +46,15 @@
                 </div>
             </div>
             
-            <div class="card-footer">
+            <!-- Actions -->
+            <div class="card-footer d-flex flex-wrap align-items-center gap-2">
                 {% if is_registered %}
                     <form method="POST" action="{{ url_for('student.unregister_event', event_id=event.id) }}" class="d-inline">
                         <button type="submit" class="btn btn-danger">
                             <i class="fas fa-times"></i> Unregister
                         </button>
                     </form>
-                    <span class="text-success ms-2">
-                        <i class="fas fa-check"></i> You are registered for this event
-                    </span>
+                    <span class="text-success ms-2"><i class="fas fa-check"></i> You are registered</span>
                 {% else %}
                     {% if event.is_full %}
                         <button class="btn btn-secondary" disabled>
@@ -74,17 +73,18 @@
                     {% endif %}
                 {% endif %}
                 
-                <a href="{{ url_for('student.events') }}" class="btn btn-secondary ms-2">
+                <a href="{{ url_for('student.events') }}" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left"></i> Back to Events
                 </a>
             </div>
         </div>
     </div>
     
+    <!-- Sidebar Info -->
     <div class="col-md-4">
-        <div class="card">
+        <div class="glass-card">
             <div class="card-header">
-                <h6>Event Information</h6>
+                <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Event Information</h6>
             </div>
             <div class="card-body">
                 <p><strong>Created:</strong> {{ event.created_at.strftime('%B %d, %Y') }}</p>

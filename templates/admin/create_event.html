@@ -10,91 +10,79 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h4><i class="fas fa-plus"></i> Create New Event</h4>
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-plus me-2"></i> Create New Event</h4>
             </div>
             <div class="card-body">
                 <form method="POST">
+                    <!-- Event Title -->
                     <div class="mb-3">
                         <label for="title" class="form-label">Event Title</label>
                         <input type="text" class="form-control" id="title" name="title" required>
                     </div>
-                    
+
+                    <!-- Description -->
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <textarea class="form-control" id="course-description" name="description" rows="4" required></textarea>
                     </div>
-                    
-                    <!-- Add location field after description -->
+
+                    <!-- Location -->
                     <div class="mb-3">
                         <label for="location" class="form-label">Event Location</label>
-                        <input type="text" class="form-control" id="location" name="location" 
-                               placeholder="Enter event location" required>
+                        <input type="text" class="form-control" id="location" name="location" placeholder="Enter event location" required>
                     </div>
-                    
-                    <!-- Date and Time fields in a row -->
+
+                    <!-- Start & End Date/Time -->
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="date" class="form-label">Event Start Date</label>
-                                <input type="date" class="form-control" id="start_date" name="start_date" required>
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="start_date" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="start_date" name="start_date" required>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="time" class="form-label">Event Start Time</label>
-                                <input type="time" class="form-control" id="start_time" name="start_time" required>
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="start_time" class="form-label">Start Time</label>
+                            <input type="time" class="form-control" id="start_time" name="start_time" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="end_date" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="end_date" name="end_date" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="end_time" class="form-label">End Time</label>
+                            <input type="time" class="form-control" id="end_time" name="end_time" required>
                         </div>
                     </div>
+
+                    <!-- Category & Capacity -->
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="date" class="form-label">Event End Date</label>
-                                <input type="date" class="form-control" id="end_date" name="end_date" required>
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-control" id="category" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="Academic">Academic</option>
+                                <option value="Cultural">Cultural</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Technical">Technical</option>
+                                <option value="Social">Social</option>
+                                <option value="Workshop">Workshop</option>
+                                <option value="Seminar">Seminar</option>
+                                <option value="Other">Other</option>
+                            </select>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="time" class="form-label">Event End Time</label>
-                                <input type="time" class="form-control" id="end_time" name="end_time" required>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="category" class="form-label">Category</label>
-                                <select class="form-control" id="category" name="category" required>
-                                    <option value="">Select Category</option>
-                                    <option value="Academic">Academic</option>
-                                    <option value="Cultural">Cultural</option>
-                                    <option value="Sports">Sports</option>
-                                    <option value="Technical">Technical</option>
-                                    <option value="Social">Social</option>
-                                    <option value="Workshop">Workshop</option>
-                                    <option value="Seminar">Seminar</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="max_capacity" class="form-label">Maximum Capacity</label>
-                                <input type="number" class="form-control" id="max_capacity" name="max_capacity" min="1" required>
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="max_capacity" class="form-label">Maximum Capacity</label>
+                            <input type="number" class="form-control" id="max_capacity" name="max_capacity" min="1" required>
                         </div>
                     </div>
-                    
+
+                    <!-- Buttons -->
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Create Event
+                            <i class="fas fa-save me-1"></i> Create Event
                         </button>
                         <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Cancel
+                            <i class="fas fa-times me-1"></i> Cancel
                         </a>
                     </div>
                 </form>
