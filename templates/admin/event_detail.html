@@ -44,6 +44,16 @@
                         </div>
                     </div>
                 </div>
+                <!-- Add to templates/admin/event_detail.html -->
+                <!-- Add this button in the event actions section -->
+                {% if event.is_past and event.registered_users %}
+                <form method="POST" action="{{ url_for('admin.generate_event_certificates', event_id=event.id) }}" class="d-inline">
+                    <button type="submit" class="btn btn-warning" 
+                            onclick="return confirm('Generate certificates for all {{ event.registered_users|length }} participants?')">
+                        <i class="fas fa-certificate"></i> Generate Certificates
+                    </button>
+                </form>
+                {% endif %}
             </div>
         </div>
     </div>

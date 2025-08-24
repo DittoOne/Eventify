@@ -1,12 +1,17 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app
 from flask_login import login_required, current_user
 from viewmodels.student_viewmodel import StudentViewModel
+from utils.certificate_generator import CertificateGenerator
+from flask import send_file, flash, redirect, url_for, render_template
+import os
+from utils.certificate_generator import CertificateGenerator
 from datetime import date, datetime
 from werkzeug.utils import secure_filename
 import os
 from models import db
 from models.event import Event
 from sqlalchemy import not_
+from flask import send_file
 
 student_bp = Blueprint('student', __name__, url_prefix='/student')
 
@@ -229,3 +234,105 @@ def debug_recommendations():
         debug_info['trending_error'] = str(e)
     
     return render_template('student/debug_recommendations.html', debug_info=debug_info)
+#certificates routes
+cert_generator = None
+
+def init_certificate_generator():
+    global cert_generator
+    from flask import current_app
+    cert_generator = CertificateGenerator(current_app)
+
+@student_bp.route('/certificates')
+@login_required
+def certificates():
+    """View user certificates and eligible events"""
+    if cert_generator is None:
+        init_certificate_generator()
+    
+    # Get existing certificates
+    user_certificates = cert_generator.get_user_certificates(current_user.id)
+    
+    # Get events eligible for certificate generation
+    eligible_events = cert_generator.get_user_eligible_events(current_user)
+    
+    # Get pending events (not yet completed)
+    pending_events = cert_generator.get_user_pending_events(current_user)
+    
+    return render_template('student/certificates.html', 
+                         certificates=user_certificates,
+                         eligible_events=eligible_events,
+                         pending_events=pending_events)
+
+@student_bp.route('/download-certificate/<cert_id>')
+@login_required
+def download_certificate_simple(cert_id):
+    """Download certificate"""
+    if cert_generator is None:
+        init_certificate_generator()
+        
+    cert_data = cert_generator.verify_certificate(cert_id)
+    
+    if not cert_data['valid'] or cert_data['data']['user_id'] != current_user.id:
+        flash('Certificate not found or access denied', 'error')
+        return redirect(url_for('student.certificates'))
+    
+    # Record download
+    cert_generator.record_download(cert_id)
+    
+    # Send file
+    filepath = os.path.join(current_app.static_folder, 'certificates', cert_data['data']['filename'])
+    if not os.path.exists(filepath):
+        flash('Certificate file not found', 'error')
+        return redirect(url_for('student.certificates'))
+    
+    return send_file(filepath, as_attachment=True, 
+                    download_name=f"certificate_{cert_data['data']['event_title']}.pdf")
+
+@student_bp.route('/generate-certificate/<int:event_id>')
+@login_required
+def generate_single_certificate(event_id):
+    """Generate certificate for a specific event"""
+    if cert_generator is None:
+        init_certificate_generator()
+    
+    from models.event import Event
+    event = Event.query.get_or_404(event_id)
+    
+    try:
+        cert_id, filename = cert_generator.generate_certificate(current_user, event)
+        flash(f'Certificate generated successfully for "{event.title}"!', 'success')
+    except ValueError as e:
+        flash(str(e), 'warning')
+    except Exception as e:
+        flash(f'Error generating certificate: {str(e)}', 'error')
+    
+    return redirect(url_for('student.certificates'))
+
+@student_bp.route('/generate-all-certificates')
+@login_required
+def generate_all_certificates():
+    """Generate certificates for all eligible events"""
+    if cert_generator is None:
+        init_certificate_generator()
+    
+    eligible_events = cert_generator.get_user_eligible_events(current_user)
+    generated = 0
+    errors = 0
+    
+    for event_data in eligible_events:
+        event = event_data['event']
+        try:
+            cert_generator.generate_certificate(current_user, event)
+            generated += 1
+        except Exception as e:
+            print(f"Error generating certificate for {event.title}: {e}")
+            errors += 1
+    
+    if generated > 0:
+        flash(f'Generated {generated} certificate(s) successfully!', 'success')
+    if errors > 0:
+        flash(f'{errors} certificate(s) could not be generated', 'warning')
+    if generated == 0 and errors == 0:
+        flash('No new certificates to generate', 'info')
+    
+    return redirect(url_for('student.certificates'))
