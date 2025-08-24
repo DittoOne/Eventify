@@ -6,33 +6,35 @@ from models.user import User
 from views.auth import auth_bp
 from views.student import student_bp
 from views.admin import admin_bp
+from extensions import mail  # import here
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    
-    # Initialize extensions
+    mail.init_app(app)  # initialize mail here
+
+    # init extensions
     db.init_app(app)
-    
-    # Setup Flask-Login
+    mail.init_app(app)
+
+    # flask-login setup
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Please log in to access this page.'
-    
+
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
-    
-    # Register blueprints
+
+    # blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(student_bp)
     app.register_blueprint(admin_bp)
-    
-    # Create tables
+
     with app.app_context():
         db.create_all()
-    
+
     @app.route('/')
     def index():
         if current_user.is_authenticated:
@@ -41,7 +43,7 @@ def create_app():
             else:
                 return redirect(url_for('admin.dashboard'))
         return redirect(url_for('auth.login'))
-    
+
     return app
 
 if __name__ == '__main__':

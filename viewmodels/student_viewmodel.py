@@ -5,6 +5,7 @@ from datetime import datetime, date
 from sqlalchemy import or_, and_
 # Fix the import - use the correct module name
 from models import reccomendation_engine
+from utils.email_utils import send_event_registration_email
 
 class StudentViewModel:
     @staticmethod
@@ -21,6 +22,7 @@ class StudentViewModel:
     @staticmethod
     def register_for_event(user, event_id):
         """Register user for an event"""
+        send_event_registration_email(user.email, Event.query.get(event_id))
         try:
             event = Event.query.get_or_404(event_id)
             
@@ -39,7 +41,6 @@ class StudentViewModel:
             # Register user
             event.registered_users.append(user)
             db.session.commit()
-            
             return True, "Successfully registered for the event"
         except Exception as e:
             db.session.rollback()
