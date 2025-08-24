@@ -138,3 +138,29 @@ def profile():
         return redirect(url_for('admin.profile'))
 
     return render_template('admin/profile.html', user=current_user)
+@admin_bp.route('/events/search')
+@login_required
+def search_events():
+    search_query = request.args.get('q', '')
+    category = request.args.get('category', 'all')
+    date = request.args.get('date')
+    
+    # Convert date strings to date objects if provided
+    if date:
+        date = datetime.strptime(date, '%Y-%m-%d').date()
+    
+        
+    events = AdminViewModel.search_events(
+        search_query=search_query,
+        category=category,
+        date=date,
+    )
+    
+    return render_template('search_events.html',
+                      search_query=search_query,
+                      events=events,
+                      selected_category=category,
+                      date=date,
+                     #search_events='search_events',  # Add this
+                     #event_detail_route='student.event_detail'
+                     )

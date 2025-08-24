@@ -1,4 +1,4 @@
-from models.user import User
+from ..models.user import User
 from models import db
 from flask_login import login_user, logout_user
 

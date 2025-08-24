@@ -3,9 +3,77 @@
 
 {% block extra_css %}
 <link href="{{ url_for('static', filename='css/student.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
+<!-- Search Bar for Dashboard -->
+    <!-- Main Search Bar with Filters -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('student.search_events') }}">
+                <!-- Top Search Bar -->
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="search-wrapper">
+                            <div class="input-group input-group-lg">
+                                <input type="text" class="form-control search-input" name="q" 
+                                       value="{{ search_query }}" placeholder="Search for events..." 
+                                       style="border-radius: 0.5rem 0 0 0.5rem; padding-left: 1.5rem;">
+                                <button class="btn btn-primary search-btn" type="submit" 
+                                        style="border-radius: 0 0.5rem 0.5rem 0; padding-left: 2rem; padding-right: 2rem;">
+                                    <i class="fas fa-search me-2"></i>Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Filter Options -->
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" name="category">
+                            <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All Categories</option>
+                            <option value="Academic" {% if selected_category == 'Academic' %}selected{% endif %}>Academic</option>
+                            <option value="Cultural" {% if selected_category == 'Cultural' %}selected{% endif %}>Cultural</option>
+                            <option value="Sports" {% if selected_category == 'Sports' %}selected{% endif %}>Sports</option>
+                            <option value="Technical" {% if selected_category == 'Technical' %}selected{% endif %}>Technical</option>
+                            <option value="Social" {% if selected_category == 'Social' %}selected{% endif %}>Social</option>
+                            <option value="Workshop" {% if selected_category == 'Workshop' %}selected{% endif %}>Workshop</option>
+                            <option value="Seminar" {% if selected_category == 'Seminar' %}selected{% endif %}>Seminar</option>
+                            <option value="Other" {% if selected_category == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" class="form-control" name="start_date" 
+                               value="{{ start_date|string if start_date else '' }}">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">End Date</label>
+                        <input type="date" class="form-control" name="end_date" 
+                               value="{{ end_date|string if end_date else '' }}">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Location</label>
+                        <input type="text" class="form-control" name="location" 
+                               value="{{ location if location else '' }}" placeholder="Enter location">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Time</label>
+                        <input type="time" class="form-control" name="time" 
+                               value="{{ time if time else '' }}">
+                    </div>
+                    <div class="col-md-1 d-flex align-items-end">
+                        <button type="submit" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-filter me-2"></i>Apply
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 <div class="row">
     <div class="col-md-3">
         <div class="card">
@@ -18,6 +86,9 @@
                 </a>
                 <a href="{{ url_for('student.events') }}" class="list-group-item list-group-item-action">
                     <i class="fas fa-calendar"></i> All Events
+                </a>
+                <a href="{{ url_for('student.search_events') }}" class="list-group-item list-group-item-action">
+                    <i class="fas fa-search"></i> Search Events
                 </a>
             </div>
         </div>
@@ -44,6 +115,9 @@
                             {% endfor %}
                         {% else %}
                             <p class="text-muted">No registered events yet.</p>
+                            <a href="{{ url_for('student.search_events') }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-search me-2"></i>Find Events
+                            </a>
                         {% endif %}
                     </div>
                 </div>
@@ -73,4 +147,6 @@
         </div>
     </div>
 </div>
+
+
 {% endblock %}

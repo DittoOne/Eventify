@@ -144,6 +144,8 @@ def search_events():
     category = request.args.get('category', 'all')
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
+    location = request.args.get('location', '')  # নতুন
+    time = request.args.get('time', '') 
     
     # Convert date strings to date objects if provided
     if start_date:
@@ -158,9 +160,12 @@ def search_events():
         end_date=end_date
     )
     
-    return render_template('student/search_events.html',
-                         events=events,
-                         search_query=search_query,
-                         selected_category=category,
-                         start_date=start_date,
-                         end_date=end_date)
+    return render_template('search_events.html',
+                          search_query=search_query,
+                          events=events,
+                          selected_category=category,
+                          start_date=start_date,
+                          end_date=end_date,
+                          location=location,      # নতুন
+                          time=time,             # নতুন
+                          user_type='student')
