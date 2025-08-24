@@ -65,18 +65,17 @@
                     <h4 class="mb-0 text-dark"><i class="fas fa-user-circle me-2"></i>{{ user.username }}</h4>
                     <span class="badge bg-primary fs-6">{{ user.role }}</span>
                 </div>
-
-                <!-- Card Body -->
-                <form method="POST" enctype="multipart/form-data" class="animate-fade">
-                    <!-- Profile Image -->
-                    <div class="text-center mb-4">
-                        <div class="avatar-wrapper mx-auto">
-                            <img src="{{ user.profile_image_url or url_for('static', filename='img/default_profile.png') }}"
-                                 alt="Profile" class="shadow-sm">
-                            <label for="profile_image" class="btn btn-sm btn-outline-light mt-2">
-                                <i class="fas fa-camera me-1"></i> Change Photo
-                            </label>
-                            <input type="file" class="d-none" id="profile_image" name="profile_image" accept="image/*">
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="text-center mb-4">
+                            <img src="{{ url_for('static', filename=user.profile_image) if user.profile_image else url_for('static', filename='img/default_profile.png') }}"
+                                 alt="Profile" class="rounded-circle" width="150" height="150">
+                            <div class="mt-2">
+                                <label for="profile_image" class="btn btn-sm btn-outline-primary">
+                                    Change Photo
+                                </label>
+                                <input type="file" class="d-none" id="profile_image" name="profile_image" accept="image/*">
+                            </div>
                         </div>
                     </div>
 

@@ -1,1 +1,1 @@
-flask
+CERTIFICATE_UPLOAD_FOLDER = 'static/certificates'

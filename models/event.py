@@ -1,5 +1,7 @@
 from datetime import datetime
 from . import db
+from sqlalchemy.dialects.sqlite import JSON
+from sqlalchemy.ext.mutable import MutableList
 
 # Association table for many-to-many relationship
 event_registrations = db.Table('event_registrations',
@@ -24,6 +26,9 @@ class Event(db.Model):
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    images = db.Column(MutableList.as_mutable(JSON), default=[])
+    documents = db.Column(MutableList.as_mutable(JSON), default=[])
     
     # Relationships
     creator = db.relationship('User', foreign_keys=[creator_id], back_populates='created_events')

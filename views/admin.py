@@ -6,6 +6,8 @@ from datetime import datetime
 import os
 from models import db
 from models.event import Event
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
+import json
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -34,6 +36,11 @@ def create_event():
         location = request.form.get('location', '')
         category = request.form.get('category', '')
         max_capacity = request.form.get('max_capacity', '0')
+        image_files = request.files.getlist('images')
+        doc_files = request.files.getlist('documents')
+
+        image_paths = save_files(image_files, 'images')
+        document_paths = save_files(doc_files, 'docs')
         
         # Validate required fields
         if not (title and description and start_date_str and end_date_str and start_time_str and end_time_str and location and category and max_capacity):
@@ -48,7 +55,8 @@ def create_event():
 
         success, message = AdminViewModel.create_event(
             title, description, start_date, start_time, 
-            end_date, end_time, location, category, max_capacity, current_user
+            end_date, end_time, location, category, max_capacity, current_user,
+            image_paths,document_paths
         )
 
         flash(message, 'success' if success else 'error')
@@ -68,8 +76,8 @@ def edit_event(event_id):
         return redirect(url_for('admin.dashboard'))
     
     if request.method == 'POST':
+        # Basic event info
         title = request.form.get('title', '')
-        id=request.form.get('event_id','')
         description = request.form.get('description', '')
         start_date_str = request.form.get('start_date', '')
         end_date_str = request.form.get('end_date', '')
@@ -82,25 +90,77 @@ def edit_event(event_id):
         # Validate required fields
         if not (title and description and start_date_str and end_date_str and start_time_str and end_time_str and location and category and max_capacity):
             flash('All fields are required.', 'error')
-            return render_template('admin/create_event.html', event=request.form)
+            return render_template('admin/edit_event.html', event=event)
 
         start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
         start_time = datetime.strptime(start_time_str, '%H:%M').time()
         end_time = datetime.strptime(end_time_str, '%H:%M').time()
         max_capacity = int(max_capacity)
+
+        # Handle files to remove
+        delete_images = request.form.getlist('remove_images')
+        delete_docs = request.form.getlist('remove_docs')
+
+        new_images_add=request.form.getlist('new_images')
         
+
+        for img in delete_images:
+            img_path = os.path.join(current_app.root_path, 'static', 'uploads', 'events', img)
+            if os.path.exists(img_path):
+                os.remove(img_path)
+            if img in event.images:
+                event.images.remove(img)
+
+        for doc in delete_docs:
+            doc_path = os.path.join(current_app.root_path, 'static', 'uploads', 'events', doc)
+            if os.path.exists(doc_path):
+                os.remove(doc_path)
+            if doc in event.documents:
+                event.documents.remove(doc)
+
+        for img in event.images:
+            print("Remaining image:", img)
+        
+        
+
+
+        # Handle new uploads
+        new_images = request.files.getlist('new_images')
+        new_docs = request.files.getlist('new_documents')
+        new_image_paths = save_files(new_images, 'images')
+        new_doc_paths = save_files(new_docs, 'docs')
+
+        # Append new files to existing ones
+        if new_image_paths:
+            event.images.extend(new_image_paths)
+        if new_doc_paths:
+            event.documents.extend(new_doc_paths)
+
+        # Update the rest of the event
         success, message = AdminViewModel.update_event(
-            id , title,description, start_date, start_time,end_date,
-            end_time, location, category, max_capacity, current_user
+            event_id=event.id,
+            title=title,
+            description=description,
+            start_date=start_date,
+            start_time=start_time,
+            end_date=end_date,
+            end_time=end_time,
+            location=location,
+            category=category,
+            max_capacity=max_capacity,
+            images=event.images,
+            documents=event.documents
         )
-        
+
         flash(message, 'success' if success else 'error')
-        
+
         if success:
             return redirect(url_for('admin.dashboard'))
-    
+        
+
     return render_template('admin/edit_event.html', event=event)
+
 
 @admin_bp.route('/delete-event/<int:event_id>', methods=['POST'])
 def delete_event(event_id):
@@ -135,12 +195,13 @@ def profile():
         # Handle profile updates
         if 'profile_image' in request.files:
             file = request.files['profile_image']
-            if file.filename != '':
+            if file and file.filename != '':
                 filename = secure_filename(file.filename)
-                upload_folder = os.path.join(current_app.root_path, 'static/uploads')
+                upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
                 os.makedirs(upload_folder, exist_ok=True)
                 file.save(os.path.join(upload_folder, filename))
-                current_user.profile_image = f'/static/uploads/{filename}'
+                # Save only the relative path for use with url_for('static', ...)
+                current_user.profile_image = f'uploads/{filename}'
 
         current_user.username = request.form['username']
         current_user.email = request.form['email']
@@ -192,3 +253,21 @@ def search_events():
 def event_detail(event_id):
     event = Event.query.get_or_404(event_id)
     return render_template('admin/event_detail.html', event=event)
+
+# utils/file_utils.py
+def save_files(files, folder):
+    saved_paths = []
+    upload_folder = os.path.join('static', 'uploads', 'events', folder)
+    os.makedirs(upload_folder, exist_ok=True)
+
+    for file in files:
+        if file.filename == '':
+            continue
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(upload_folder, filename)
+        file.save(file_path)
+        # Save relative path with forward slashes
+        relative_path = f"{folder}/{filename}".replace("\\", "/")
+        saved_paths.append(relative_path)
+
+    return saved_paths

@@ -136,12 +136,14 @@ def profile():
     if request.method == 'POST':
         if 'profile_image' in request.files:
             file = request.files['profile_image']
-            if file.filename != '':
+            if file and file.filename != '':
                 filename = secure_filename(file.filename)
-                upload_folder = os.path.join(current_app.root_path, 'static/uploads')
+                upload_folder = os.path.join('static', 'uploads', 'profiles')
                 os.makedirs(upload_folder, exist_ok=True)
-                file.save(os.path.join(upload_folder, filename))
-                current_user.profile_image = f'/static/uploads/{filename}'
+                file_path = os.path.join(upload_folder, filename)
+                file.save(file_path)
+                # Save relative path for use in template
+                current_user.profile_image = f'uploads/profiles/{filename}'
 
         current_user.username = request.form['username']
         current_user.email = request.form['email']

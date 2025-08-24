@@ -17,18 +17,42 @@
     {% if events %}
         {% for event in events %}
         <div class="col-md-6 col-lg-4 mb-4">
-            <div class="glass-card h-100 d-flex flex-column">
-                <div class="card-body flex-grow-1">
-                    <h5 class="card-title mb-2">{{ event.title }}</h5>
-                    <span class="badge bg-primary mb-3">{{ event.category }}</span>
-                    <p class="card-text text-muted">{{ event.description[:100] }}{% if event.description|length > 100 %}...{% endif %}</p>
-                    
-                    <ul class="list-unstyled small mt-3">
-                        <li><i class="fas fa-calendar me-2 text-primary"></i>{{ event.start_date.strftime('%B %d, %Y') }}</li>
-                        <li><i class="fas fa-clock me-2 text-success"></i>{{ event.start_time.strftime('%I:%M %p') }}</li>
-                        <li><i class="fas fa-map-marker-alt me-2 text-danger"></i>{{ event.location }}</li>
-                        <li><i class="fas fa-users me-2 text-info"></i>{{ event.registration_count }}/{{ event.max_capacity }} registered</li>
-                    </ul>
+            <div class="card h-100">
+                
+                <!-- Event Images Carousel -->
+                {% if event.images %}
+                <div id="carousel{{ event.id }}" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for img in event.images %}
+                        <div class="carousel-item {% if loop.index0 == 0 %}active{% endif %}">
+                            <img src="{{ url_for('static', filename='uploads/events/' + img) }}" 
+                                 class="d-block w-100 rounded-top" 
+                                 style="height:200px; object-fit:cover;" 
+                                 alt="Event Image">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if event.images|length > 1 %}
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel{{ event.id }}" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carousel{{ event.id }}" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <h5 class="card-title">{{ event.title }}</h5>
+                    <p class="card-text">
+                        {{ event.description[:100] }}{% if event.description|length > 100 %}...{% endif %}
+                    </p>
+                    <p class="mb-1"><i class="fas fa-calendar"></i> {{ event.start_date.strftime('%B %d, %Y') }}</p>
+                    <p class="mb-1"><i class="fas fa-clock"></i> {{ event.start_time.strftime('%I:%M %p') }}</p>
+                    <p class="mb-1"><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
+                    <p class="mb-1"><i class="fas fa-tag"></i> {{ event.category }}</p>
+                    <p class="mb-3"><i class="fas fa-users"></i> {{ event.registration_count }}/{{ event.max_capacity }} registered</p>
                 </div>
                 <div class="card-footer bg-transparent border-0">
                     <a href="{{ url_for('student.event_detail', event_id=event.id) }}" class="btn btn-primary w-100">

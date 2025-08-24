@@ -3,6 +3,8 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from . import db
+from sqlalchemy.dialects.sqlite import JSON
+from sqlalchemy.ext.mutable import MutableList
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -13,6 +15,9 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='student')  # 'student' or 'admin'
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Example addition to your User model
+    profile_image = db.Column(db.String(255), default=None)
     
     # Relationship with events (for registrations)
     registered_events = db.relationship('Event', secondary='event_registrations', back_populates='registered_users')
