@@ -28,18 +28,9 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="d-flex align-items-center">
-<<<<<<< HEAD
-                            <div class="avatar-wrapper">
-                                <img src="{{ current_user.profile_image_url or url_for('static', filename='img/default_profile.png') }}"
-                                    alt="Profile" class="rounded-circle me-2" width="40" height="40"
-                                    loading="lazy">
-                            </div>
-                            <span>{{ current_user.username }}</span>
-=======
                             <img src="{{ url_for('static', filename=current_user.profile_image) if current_user.profile_image else url_for('static', filename='img/default_profile.png') }}"
                                 alt="Profile" class="rounded-circle me-2" width="32" height="32">
                             <span class="text-white">{{ current_user.username }}</span>
->>>>>>> cd4bcf5f98902fe40991a8b7fe853094ddbc6b87
                         </div>
                     </a>
                     <ul class="dropdown-menu shadow-lg" aria-labelledby="userDropdown">

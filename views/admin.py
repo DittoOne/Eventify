@@ -253,8 +253,6 @@ def search_events():
 def event_detail(event_id):
     event = Event.query.get_or_404(event_id)
     return render_template('admin/event_detail.html', event=event)
-<<<<<<< HEAD
-=======
 
 # utils/file_utils.py
 def save_files(files, folder):
@@ -273,4 +271,3 @@ def save_files(files, folder):
         saved_paths.append(relative_path)
 
     return saved_paths
->>>>>>> cd4bcf5f98902fe40991a8b7fe853094ddbc6b87

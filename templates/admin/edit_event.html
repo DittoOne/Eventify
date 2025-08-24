@@ -15,49 +15,18 @@
                 <h4 class="mb-0"><i class="fas fa-edit me-2"></i> Edit Event</h4>
             </div>
             <div class="card-body">
-<<<<<<< HEAD
-                <form method="POST">
-                    <input type="hidden" name="event_id" value="{{ event.id }}">
+                
+                    
 
                     <!-- Event Title -->
-=======
                 <form method="POST" enctype="multipart/form-data">
->>>>>>> cd4bcf5f98902fe40991a8b7fe853094ddbc6b87
+                    <input type="hidden" name="event_id" value="{{ event.id }}">
                     <div class="mb-3">
                         <label for="title" class="form-label">Event Title</label>
                         <input type="text" class="form-control" id="title" name="title" value="{{ event.title }}"
                             required>
                     </div>
 
-<<<<<<< HEAD
-                    <!-- Description -->
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="course-description" name="description" rows="4" required>{{ event.description }}</textarea>
-                    </div>
-
-                    <!-- Start & End Date/Time -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="start_date" class="form-label">Start Date</label>
-                            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ event.start_date.strftime('%Y-%m-%d') }}" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="start_time" class="form-label">Start Time</label>
-                            <input type="time" class="form-control" id="start_time" name="start_time" value="{{ event.start_time.strftime('%H:%M') }}" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="end_date" class="form-label">End Date</label>
-                            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ event.end_date.strftime('%Y-%m-%d') }}" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="end_time" class="form-label">End Time</label>
-                            <input type="time" class="form-control" id="end_time" name="end_time" value="{{ event.end_time.strftime('%H:%M') }}" required>
-                        </div>
-                    </div>
-
-                    <!-- Location -->
-=======
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
@@ -98,32 +67,11 @@
                         </div>
                     </div>
 
->>>>>>> cd4bcf5f98902fe40991a8b7fe853094ddbc6b87
                     <div class="mb-3">
                         <label for="location" class="form-label">Location</label>
                         <input type="text" class="form-control" id="location" name="location"
                             value="{{ event.location }}" required>
                     </div>
-<<<<<<< HEAD
-
-                    <!-- Category & Capacity -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="category" class="form-label">Category</label>
-                            <select class="form-control" id="category" name="category" required>
-                                {% for cat in ['Academic', 'Cultural', 'Sports', 'Technical', 'Social', 'Workshop', 'Seminar', 'Other'] %}
-                                <option value="{{ cat }}" {{ 'selected' if event.category == cat else '' }}>{{ cat }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="max_capacity" class="form-label">Maximum Capacity</label>
-                            <input type="number" class="form-control" id="max_capacity" name="max_capacity" min="1" value="{{ event.max_capacity }}" required>
-                        </div>
-                    </div>
-
-                    <!-- Buttons -->
-=======
 
                     <div class="row">
                         <div class="col-md-6">
@@ -194,7 +142,6 @@
                     </div>
 
 
->>>>>>> cd4bcf5f98902fe40991a8b7fe853094ddbc6b87
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-save me-1"></i> Update Event

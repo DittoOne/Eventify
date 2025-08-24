@@ -6,15 +6,16 @@
     border: 1px solid var(--glass-border);
     border-radius: 1rem;
     box-shadow: var(--glass-shadow);
-    padding: 1.25rem; /* more padding */
+    padding: 1.25rem;
     margin-bottom: 1rem;
+    color: #ffffff; /* all text white */
 }
 .event-item:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 .event-item h6 a {
-    color: var(--primary-color);
+    color: #ffffff;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
@@ -25,13 +26,13 @@
 }
 .event-item p {
     margin-bottom: 0.5rem;
-    color: var(--text-secondary);
+    color: #ffffff;
     font-size: 0.95rem;
 }
 .event-item i {
     width: 22px;
     margin-right: 6px;
-    color: var(--primary-color);
+    color: #ffffff;
 }
 
 /* Recommendations */
@@ -40,8 +41,15 @@
     border-radius: 0.75rem;
     transition: all 0.3s ease;
     background: var(--glass-bg);
-    padding: 1rem 1.25rem; /* more padding */
+    padding: 1rem 1.25rem;
     margin-bottom: 0.75rem;
+    color: #ffffff;
+}
+.recommendation-item h6 a {
+    color: #ffffff;
+}
+.recommendation-item small {
+    color: #ffffff;
 }
 .recommendation-item:hover {
     transform: translateX(6px);
@@ -52,13 +60,17 @@
 .trending-item {
     padding: 0.75rem 0;
     margin-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid rgba(255,255,255,0.2);
     transition: all 0.3s ease;
+    color: #ffffff;
 }
 .trending-item a {
     font-weight: 600;
-    color: var(--primary-color);
+    color: #ffffff;
     text-decoration: none;
+}
+.trending-item small {
+    color: #ffffff;
 }
 .trending-item:hover a {
     text-decoration: underline;
@@ -71,8 +83,8 @@
     border: none;
     transition: all 0.3s ease;
     font-weight: 500;
-    color: var(--text-primary);
-    padding: 0.85rem 1.25rem; /* more padding */
+    color: #ffffff;
+    padding: 0.85rem 1.25rem;
     border-radius: 0.5rem;
 }
 .list-group-item:hover {
@@ -88,8 +100,9 @@
 /* Cards */
 .card, .glass-card {
     border-radius: 1rem;
-    padding: 1.25rem; /* more padding */
+    padding: 1.25rem;
     margin-bottom: 1.5rem;
+    color: #ffffff; /* all card text white */
 }
 
 /* Animations */

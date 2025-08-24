@@ -19,10 +19,7 @@ class Config:
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
     MAIL_DEFAULT_SENDER = ("Eventify", os.getenv("MAIL_USERNAME"))
 
-<<<<<<< HEAD
     CERTIFICATE_UPLOAD_FOLDER = 'static/certificates'
     MAX_CERTIFICATE_FILE_SIZE = 16 * 1024 * 1024  # 16MB
-=======
     # Upload folder
     UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads', 'events')
->>>>>>> cd4bcf5f98902fe40991a8b7fe853094ddbc6b87
