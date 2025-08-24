@@ -7,185 +7,154 @@
 {% endblock %}
 
 {% block content %}
-<!-- Search Bar for Dashboard -->
-    <!-- Main Search Bar with Filters -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <form method="GET" action="{{ url_for('student.search_events') }}">
-                <!-- Top Search Bar -->
-                <div class="row mb-3">
-                    <div class="col-12">
-                        <div class="search-wrapper">
-                            <div class="input-group input-group-lg">
-                                <input type="text" class="form-control search-input" name="q" 
-                                       value="{{ search_query }}" placeholder="Search for events..." 
-                                       style="border-radius: 0.5rem 0 0 0.5rem; padding-left: 1.5rem;">
-                                <button class="btn btn-primary search-btn" type="submit" 
-                                        style="border-radius: 0 0.5rem 0.5rem 0; padding-left: 2rem; padding-right: 2rem;">
-                                    <i class="fas fa-search me-2"></i>Search
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Filter Options -->
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <label class="form-label">Category</label>
-                        <select class="form-select" name="category">
-                            <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All Categories</option>
-                            <option value="Academic" {% if selected_category == 'Academic' %}selected{% endif %}>Academic</option>
-                            <option value="Cultural" {% if selected_category == 'Cultural' %}selected{% endif %}>Cultural</option>
-                            <option value="Sports" {% if selected_category == 'Sports' %}selected{% endif %}>Sports</option>
-                            <option value="Technical" {% if selected_category == 'Technical' %}selected{% endif %}>Technical</option>
-                            <option value="Social" {% if selected_category == 'Social' %}selected{% endif %}>Social</option>
-                            <option value="Workshop" {% if selected_category == 'Workshop' %}selected{% endif %}>Workshop</option>
-                            <option value="Seminar" {% if selected_category == 'Seminar' %}selected{% endif %}>Seminar</option>
-                            <option value="Other" {% if selected_category == 'Other' %}selected{% endif %}>Other</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Start Date</label>
-                        <input type="date" class="form-control" name="start_date" 
-                               value="{{ start_date|string if start_date else '' }}">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">End Date</label>
-                        <input type="date" class="form-control" name="end_date" 
-                               value="{{ end_date|string if end_date else '' }}">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Location</label>
-                        <input type="text" class="form-control" name="location" 
-                               value="{{ location if location else '' }}" placeholder="Enter location">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Start Time</label>
-                        <input type="time" class="form-control" name="start_time" 
-                               value="{{ time if time else '' }}">
-                    </div>
-                    <div class="col-md-1 d-flex align-items-end">
-                        <button type="submit" class="btn btn-outline-primary w-100">
-                            <i class="fas fa-filter me-2"></i>Apply
+<!-- Search Bar -->
+<div class="glass-card mb-4">
+    <form method="GET" action="{{ url_for('student.search_events') }}">
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="search-wrapper">
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control search-input" name="q"
+                               value="{{ search_query }}" placeholder="Search for events...">
+                        <button class="btn btn-primary search-btn" type="submit">
+                            <i class="fas fa-search me-2"></i>Search
                         </button>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
-<!--reccomendation system -->
+
+        <!-- Filters -->
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Category</label>
+                <select class="form-select" name="category">
+                    <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All</option>
+                    <option value="Academic" {% if selected_category == 'Academic' %}selected{% endif %}>Academic</option>
+                    <option value="Cultural" {% if selected_category == 'Cultural' %}selected{% endif %}>Cultural</option>
+                    <option value="Sports" {% if selected_category == 'Sports' %}selected{% endif %}>Sports</option>
+                    <option value="Technical" {% if selected_category == 'Technical' %}selected{% endif %}>Technical</option>
+                    <option value="Social" {% if selected_category == 'Social' %}selected{% endif %}>Social</option>
+                    <option value="Workshop" {% if selected_category == 'Workshop' %}selected{% endif %}>Workshop</option>
+                    <option value="Seminar" {% if selected_category == 'Seminar' %}selected{% endif %}>Seminar</option>
+                    <option value="Other" {% if selected_category == 'Other' %}selected{% endif %}>Other</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Start Date</label>
+                <input type="date" class="form-control" name="start_date" value="{{ start_date|string if start_date else '' }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">End Date</label>
+                <input type="date" class="form-control" name="end_date" value="{{ end_date|string if end_date else '' }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Location</label>
+                <input type="text" class="form-control" name="location" value="{{ location if location else '' }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Start Time</label>
+                <input type="time" class="form-control" name="start_time" value="{{ time if time else '' }}">
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="submit" class="btn btn-outline-primary w-100">
+                    <i class="fas fa-filter me-2"></i>Apply
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Recommendations & Trending -->
 <div class="row mt-4 mb-4">
     <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5><i class="fas fa-magic"></i> Recommended For You</h5>
-            </div>
+        <div class="glass-card">
+            <div class="card-header"><h5><i class="fas fa-magic me-2"></i>Recommended</h5></div>
             <div class="card-body">
                 {% if recommendations %}
                     {% for rec in recommendations %}
-                    <div class="recommendation-item mb-1 p-2 border-left border-primary">
+                    <div class="recommendation-item mb-2">
                         <h6><a href="{{ url_for('student.event_detail', event_id=rec.event.id) }}">{{ rec.event.title }}</a></h6>
                         <small class="text-muted">{{ rec.reason }}</small>
-                        <div class="d-flex justify-content-between">
-                            <span class="badge badge-info">{{ rec.event.category }}</span>
+                        <div class="d-flex justify-content-between mt-1">
+                            <span class="badge bg-primary">{{ rec.event.category }}</span>
                             <small>{{ rec.event.start_date.strftime('%b %d') }}</small>
                         </div>
                     </div>
                     {% endfor %}
-                    <a href="{{ url_for('student.recommendations') }}" class="btn btn-sm btn-outline-primary">View All Recommendations</a>
+                    <a href="{{ url_for('student.recommendations') }}" class="btn btn-sm btn-outline-primary mt-2">View All</a>
                 {% else %}
-                    <p class="text-muted">Register for some events to get personalized recommendations!</p>
+                    <p class="text-muted">Register for events to get recommendations!</p>
                 {% endif %}
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5><i class="fas fa-fire"></i> Trending Events</h5>
-            </div>
+        <div class="glass-card">
+            <div class="card-header"><h5><i class="fas fa-fire me-2"></i>Trending</h5></div>
             <div class="card-body">
                 {% for trend in trending_events %}
-                <div class="trending-item mb-2">
+                <div class="trending-item">
                     <a href="{{ url_for('student.event_detail', event_id=trend.event.id) }}">{{ trend.event.title }}</a>
-                    <small class="text-success d-block">{{ trend.registration_count }} recent registrations</small>
+                    <small class="text-success d-block">{{ trend.registration_count }} registrations</small>
                 </div>
                 {% endfor %}
             </div>
         </div>
     </div>
 </div>
+
+<!-- Main Dashboard -->
 <div class="row">
-    <h2>Student Dashboard</h2>
+    <h2 class="mb-3">Student Dashboard</h2>
     <div class="col-md-3 pt-2">
-        
-        <div class="card">
-            <div class="card-header">
-                <h5><i class="fas fa-user"></i> Navigation</h5>
-            </div>
+        <div class="glass-card">
+            <div class="card-header"><h5><i class="fas fa-user me-2"></i>Navigation</h5></div>
             <div class="list-group list-group-flush">
-                <a href="{{ url_for('student.dashboard') }}" class="list-group-item list-group-item-action active">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-                <a href="{{ url_for('student.events') }}" class="list-group-item list-group-item-action">
-                    <i class="fas fa-calendar"></i> All Events
-                </a>
-                <a href="{{ url_for('student.search_events') }}" class="list-group-item list-group-item-action">
-                    <i class="fas fa-search"></i> Search Events
-                </a>
-                <a href="{{ url_for('student.debug_recommendations') }}" class="list-group-item list-group-item-action text-warning">
-                    <i class="fas fa-bug"></i> Debug Recommendations
-                </a>   
+                <a href="{{ url_for('student.dashboard') }}" class="list-group-item list-group-item-action active"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="{{ url_for('student.events') }}" class="list-group-item list-group-item-action"><i class="fas fa-calendar me-2"></i>All Events</a>
+                <a href="{{ url_for('student.search_events') }}" class="list-group-item list-group-item-action"><i class="fas fa-search me-2"></i>Search</a>
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-9">
-        
-        
         <div class="row">
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5><i class="fas fa-calendar-check"></i> My Registered Events</h5>
-                    </div>
+                <div class="glass-card">
+                    <div class="card-header"><h5><i class="fas fa-calendar-check me-2"></i>My Registered Events</h5></div>
                     <div class="card-body">
                         {% if registered_events %}
                             {% for event in registered_events %}
-                            <div class="event-item mb-3 p-3 border rounded">
+                            <div class="event-item mb-3 p-3">
                                 <h6><a href="{{ url_for('student.event_detail', event_id=event.id) }}">{{ event.title }}</a></h6>
-                                <p class="mb-1"><i class="fas fa-calendar"></i> {{ event.start_date.strftime('%B %d, %Y') }}</p>
-                                <p class="mb-1"><i class="fas fa-clock"></i> {{ event.start_time.strftime('%I:%M %p') }}</p>
-                                <p class="mb-0"><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
+                                <p><i class="fas fa-calendar"></i> {{ event.start_date.strftime('%B %d, %Y') }}</p>
+                                <p><i class="fas fa-clock"></i> {{ event.start_time.strftime('%I:%M %p') }}</p>
+                                <p><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
                             </div>
                             {% endfor %}
                         {% else %}
                             <p class="text-muted">No registered events yet.</p>
-                            <a href="{{ url_for('student.search_events') }}" class="btn btn-primary btn-sm">
-                                <i class="fas fa-search me-2"></i>Find Events
-                            </a>
+                            <a href="{{ url_for('student.search_events') }}" class="btn btn-primary btn-sm"><i class="fas fa-search me-2"></i>Find Events</a>
                         {% endif %}
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5><i class="fas fa-star"></i> Upcoming Events</h5>
-                    </div>
+                <div class="glass-card">
+                    <div class="card-header"><h5><i class="fas fa-star me-2"></i>Upcoming Events</h5></div>
                     <div class="card-body">
                         {% if upcoming_events %}
                             {% for event in upcoming_events %}
-                            <div class="event-item mb-3 p-3 border rounded">
+                            <div class="event-item mb-3 p-3">
                                 <h6><a href="{{ url_for('student.event_detail', event_id=event.id) }}">{{ event.title }}</a></h6>
-                                <p class="mb-1"><i class="fas fa-calendar"></i> {{ event.start_date.strftime('%B %d, %Y') }}</p>
-                                <p class="mb-0"><i class="fas fa-users"></i> {{ event.registration_count }}/{{ event.max_capacity }} registered</p>
+                                <p><i class="fas fa-calendar"></i> {{ event.start_date.strftime('%B %d, %Y') }}</p>
+                                <p><i class="fas fa-users"></i> {{ event.registration_count }}/{{ event.max_capacity }} registered</p>
                             </div>
                             {% endfor %}
-                            <a href="{{ url_for('student.events') }}" class="btn btn-primary btn-sm">View All Events</a>
+                            <a href="{{ url_for('student.events') }}" class="btn btn-primary btn-sm">View All</a>
                         {% else %}
                             <p class="text-muted">No upcoming events.</p>
                         {% endif %}
@@ -195,6 +164,4 @@
         </div>
     </div>
 </div>
-
-
 {% endblock %}

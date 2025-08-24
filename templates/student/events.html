@@ -7,8 +7,8 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>All Upcoming Events</h2>
-    <a href="{{ url_for('student.dashboard') }}" class="btn btn-secondary">
+    <h2><i class="fas fa-calendar-alt me-2"></i> All Upcoming Events</h2>
+    <a href="{{ url_for('student.dashboard') }}" class="btn btn-outline-secondary">
         <i class="fas fa-arrow-left"></i> Back to Dashboard
     </a>
 </div>
@@ -17,19 +17,22 @@
     {% if events %}
         {% for event in events %}
         <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">{{ event.title }}</h5>
-                    <p class="card-text">{{ event.description[:100] }}{% if event.description|length > 100 %}...{% endif %}</p>
-                    <p class="mb-1"><i class="fas fa-calendar"></i> {{ event.start_date.strftime('%B %d, %Y') }}</p>
-                    <p class="mb-1"><i class="fas fa-clock"></i> {{ event.start_time.strftime('%I:%M %p') }}</p>
-                    <p class="mb-1"><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
-                    <p class="mb-1"><i class="fas fa-tag"></i> {{ event.category }}</p>
-                    <p class="mb-3"><i class="fas fa-users"></i> {{ event.registration_count }}/{{ event.max_capacity }} registered</p>
+            <div class="glass-card h-100 d-flex flex-column">
+                <div class="card-body flex-grow-1">
+                    <h5 class="card-title mb-2">{{ event.title }}</h5>
+                    <span class="badge bg-primary mb-3">{{ event.category }}</span>
+                    <p class="card-text text-muted">{{ event.description[:100] }}{% if event.description|length > 100 %}...{% endif %}</p>
+                    
+                    <ul class="list-unstyled small mt-3">
+                        <li><i class="fas fa-calendar me-2 text-primary"></i>{{ event.start_date.strftime('%B %d, %Y') }}</li>
+                        <li><i class="fas fa-clock me-2 text-success"></i>{{ event.start_time.strftime('%I:%M %p') }}</li>
+                        <li><i class="fas fa-map-marker-alt me-2 text-danger"></i>{{ event.location }}</li>
+                        <li><i class="fas fa-users me-2 text-info"></i>{{ event.registration_count }}/{{ event.max_capacity }} registered</li>
+                    </ul>
                 </div>
-                <div class="card-footer">
-                    <a href="{{ url_for('student.event_detail', event_id=event.id) }}" class="btn btn-primary">
-                        View Details
+                <div class="card-footer bg-transparent border-0">
+                    <a href="{{ url_for('student.event_detail', event_id=event.id) }}" class="btn btn-primary w-100">
+                        <i class="fas fa-eye me-2"></i> View Details
                     </a>
                 </div>
             </div>
@@ -37,9 +40,10 @@
         {% endfor %}
     {% else %}
         <div class="col-12">
-            <div class="alert alert-info text-center">
-                <h4>No upcoming events</h4>
-                <p>Check back later for new events!</p>
+            <div class="glass-alert text-center py-4">
+                <i class="fas fa-info-circle fa-2x mb-2"></i>
+                <h4>No Upcoming Events</h4>
+                <p class="text-muted">Check back later for new events!</p>
             </div>
         </div>
     {% endif %}
