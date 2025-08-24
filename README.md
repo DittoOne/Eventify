@@ -112,10 +112,6 @@ The database design supports the complete event management workflow:
 - **FAQResponses** - Chatbot interaction logs
 - **EventAnalytics** - Event performance metrics
 
-<div align="center">
-  <img src="images/eventify_erd.png" alt="Database ERD" width="100%" />
-</div>
-
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -131,7 +127,7 @@ Ensure you have the following installed:
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/yourusername/Eventify.git
+git clone https://github.com/DittoOne/Eventify.git
 cd Eventify
 ```
 
@@ -151,67 +147,23 @@ source eventify_env/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
-
-4. **Set up environment variables:**
-```bash
-# Create .env file
-cp .env.example .env
-# Edit .env file with your configuration
-```
-
-5. **Initialize the database:**
-```bash
-flask db init
-flask db migrate -m "Initial migration"
-flask db upgrade
-```
-
-6. **Seed the database (optional):**
-```bash
-python seed_data.py
-```
-
-7. **Run the application:**
+4. **Run the application:**
 ```bash
 # Development mode
-flask run
-# Or
 python app.py
 
 # Production mode
-gunicorn -w 4 -b 0.0.0.0:8000 app:app
+gunicorn "app:create_app()"
 ```
 
-8. **Access the application:**
+5. **Access the application:**
    - Open your browser and navigate to `http://localhost:5000`
-
-### Environment Variables
-
-Create a `.env` file with the following variables:
-```env
-SECRET_KEY=your-secret-key-here
-DATABASE_URL=sqlite:///eventify.db
-MAIL_SERVER=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=your-email@gmail.com
-MAIL_PASSWORD=your-app-password
-MAIL_USE_TLS=True
-```
 
 ## 🎥 Live Demo
 
-* 🌐 [Live Website](https://eventify-demo.herokuapp.com/)
-* 🎦 [Demo Video](https://www.youtube.com/watch?v=your-demo-video)
-* 📖 [API Documentation](https://documenter.getpostman.com/view/your-collection)
+* 🌐 [Live Website](https://eventify-4.onrender.com/)
+* 🎦 [Demo Video]
 
-### Test Credentials
-**Admin Account:**
-- Email: admin@university.edu
-- Password: admin123
-
-**Student Account:**
-- Email: student@university.edu
-- Password: student123
 
 ## 🌟 Feature Highlights
 
@@ -239,9 +191,9 @@ MAIL_USE_TLS=True
 
 | Name                | Git Link          | LinkedIn                                    |
 | ------------------- | ----------------- | ------------------------------------------- |
-| [Md Shahriar Rahman]|        | [Profile](https://linkedin.com/in/profile) |
-| [Nur Mohammed Kazi] |        | [Profile](https://linkedin.com/in/profile) |
-| [Ali Faruk Shihab]  |        | [Profile](https://linkedin.com/in/profile) |
+| [Md Shahriar Rahman]| [GitHub](https://github.com/DittoOne)| [LinkedIn](https://www.linkedin.com/in/md-shahriar-rahman-bhuiyan-3893012a8)  |
+| [Nur Mohammed Kazi] | [GitHub](https://github.com/NurMohammadkazi)| [LinkedIn](https://www.linkedin.com/in/nur-mohammad-kazi-73632a268/) |
+| [Ali Faruk Shihab]  | [GitHub](https://github.com/farukShihab)    | [LinkedIn](https://www.linkedin.com/in/faruk-shihab-608793343) |
 
 ## 🤝 Contributing
 
@@ -265,7 +217,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 💬 Feedback
 
-If you have any feedback, suggestions, or want to collaborate — feel free to [open an issue](https://github.com/yourusername/Eventify/issues) or reach out via LinkedIn.
+If you have any feedback, suggestions, or want to collaborate — feel free to [open an issue](https://github.com/DittoOne/Eventify.git) or reach out via LinkedIn.
 
 ---
 
