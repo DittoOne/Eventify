@@ -66,6 +66,7 @@ def edit_event(event_id):
     
     if request.method == 'POST':
         title = request.form.get('title', '')
+        id=request.form.get('event_id','')
         description = request.form.get('description', '')
         start_date_str = request.form.get('start_date', '')
         end_date_str = request.form.get('end_date', '')
@@ -87,7 +88,7 @@ def edit_event(event_id):
         max_capacity = int(max_capacity)
         
         success, message = AdminViewModel.update_event(
-            title,description, start_date, start_time,end_date,
+            id , title,description, start_date, start_time,end_date,
             end_time, location, category, max_capacity, current_user
         )
         

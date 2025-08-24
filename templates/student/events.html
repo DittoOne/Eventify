@@ -21,8 +21,8 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ event.title }}</h5>
                     <p class="card-text">{{ event.description[:100] }}{% if event.description|length > 100 %}...{% endif %}</p>
-                    <p class="mb-1"><i class="fas fa-calendar"></i> {{ event.date.strftime('%B %d, %Y') }}</p>
-                    <p class="mb-1"><i class="fas fa-clock"></i> {{ event.time.strftime('%I:%M %p') }}</p>
+                    <p class="mb-1"><i class="fas fa-calendar"></i> {{ event.start_date.strftime('%B %d, %Y') }}</p>
+                    <p class="mb-1"><i class="fas fa-clock"></i> {{ event.start_time.strftime('%I:%M %p') }}</p>
                     <p class="mb-1"><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
                     <p class="mb-1"><i class="fas fa-tag"></i> {{ event.category }}</p>
                     <p class="mb-3"><i class="fas fa-users"></i> {{ event.registration_count }}/{{ event.max_capacity }} registered</p>

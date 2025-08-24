@@ -40,5 +40,5 @@ class Event(db.Model):
     @property
     def is_past(self):
         from datetime import datetime, date
-        event_datetime = datetime.combine(self.date, self.time)
+        event_datetime = datetime.combine(self.start_date, self.start_time)
         return event_datetime < datetime.now()

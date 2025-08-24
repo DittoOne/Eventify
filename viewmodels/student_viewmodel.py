@@ -8,7 +8,7 @@ class StudentViewModel:
     def get_upcoming_events():
         """Get all upcoming events"""
         today = date.today()
-        return Event.query.filter(Event.date >= today).order_by(Event.date, Event.time).all()
+        return Event.query.filter(Event.start_date >= today).order_by(Event.start_date, Event.start_time).all()
     
     @staticmethod
     def get_event_by_id(event_id):
