@@ -5,15 +5,15 @@
 
 ## 📚 Table of Contents
 
-- [📋 Project Description](#-project-description)
-- [🎯 Key Features](#-key-features)
-- [🛠️ Technologies Used](#️-technologies-used)
-- [🗎️ System Architecture](#️-system-architecture)
-- [🗃️ Database Schema](#️-database-schema)
-- [🚀 Getting Started](#-getting-started)
-- [🎥 Live Demo](#-live-demo)
-- [👨‍💻 Team](#-team)
-- [💬 Feedback](#-feedback)
+ [📋 Project Description](#-project-description)
+ [🎯 Key Features](#-key-features)
+ [🛠️ Technologies Used](#️-technologies-used)
+ [🗎️ System Architecture](#️-system-architecture)
+ [🗃️ Database Schema](#️-database-schema)
+ [🚀 Getting Started](#-getting-started)
+ [🎥 Live Demo](#-live-demo)
+ [👨‍💻 Team](#-team)
+ [💬 Feedback](#-feedback)
 
 ## 📋 Project Description
 
@@ -24,22 +24,22 @@ With advanced features including ML-powered event recommendations, automated cer
 ## 🎯 Key Features
 
 ### Core Features (MVP)
-- **Role-Based Authentication** - Secure signup/login system with Student and Club Admin roles
-- **Event Management** - Complete CRUD operations for events by club admins
-- **Event Registration** - Students can browse, register, and unregister from events
-- **Personal Dashboards** - Customized interfaces for both students and admins
-- **Event Discovery** - Browse upcoming events with detailed information
+ **Role-Based Authentication** - Secure signup/login system with Student and Club Admin roles
+ **Event Management** - Complete CRUD operations for events by club admins
+ **Event Registration** - Students can browse, register, and unregister from events
+ **Personal Dashboards** - Customized interfaces for both students and admins
+ **Event Discovery** - Browse upcoming events with detailed information
 
 ### Advanced Features
-- **🤖 AI-Powered Chatbot** - Intelligent FAQ system for common user queries
-- **📜 Certificate Generator** - Automatic PDF certificate generation for event participants
-- **🎯 ML Recommendation System** - Personalized event suggestions based on user behavior
-- **📧 Email Notifications** - Automated registration confirmations and event reminders
-- **🔍 Advanced Search & Filtering** - Filter events by category, date, location, and keywords
-- **📱 Responsive Design** - Mobile-first approach with full responsiveness
-- **🌙 Dark Mode** - Theme switching capability for enhanced user experience
-- **📊 Analytics Dashboard** - Comprehensive event statistics and insights for admins
-- **⏰ Smart Scheduling** - Prevent location conflicts and manage event deadlines
+ **🤖 AI-Powered Chatbot** - Intelligent FAQ system for common user queries
+ **📜 Certificate Generator** - Automatic PDF certificate generation for event participants
+ **🎯 ML Recommendation System** - Personalized event suggestions based on user behavior
+ **📧 Email Notifications** - Automated registration confirmations and event reminders
+ **🔍 Advanced Search & Filtering** - Filter events by category, date, location, and keywords
+ **📱 Responsive Design** - Mobile-first approach with full responsiveness
+ **🌙 Dark Mode** - Theme switching capability for enhanced user experience
+ **📊 Analytics Dashboard** - Comprehensive event statistics and insights for admins
+ **⏰ Smart Scheduling** - Prevent location conflicts and manage event deadlines
 
 ## 🛠️ Technologies Used
 
@@ -55,62 +55,62 @@ With advanced features including ML-powered event recommendations, automated cer
 </div>
 
 ### Backend Dependencies
-- **Flask 2.3.3** - Web framework
-- **Flask-SQLAlchemy 3.0.5** - ORM for database operations
-- **Flask-Login 0.6.3** - User session management
-- **Flask-WTF 1.2.1** - Form handling and validation
-- **Flask-Mail 0.10.0** - Email functionality
-- **ReportLab 4.0.4** - PDF certificate generation
-- **Pillow** - Image processing
-- **Gunicorn** - Production WSGI server
+ **Flask 2.3.3** - Web framework
+ **Flask-SQLAlchemy 3.0.5** - ORM for database operations
+ **Flask-Login 0.6.3** - User session management
+ **Flask-WTF 1.2.1** - Form handling and validation
+ **Flask-Mail 0.10.0** - Email functionality
+ **ReportLab 4.0.4** - PDF certificate generation
+ **Pillow** - Image processing
+ **Gunicorn** - Production WSGI server
 
 ## 🗎️ System Architecture
 
 Our platform follows a modular MVC architecture to ensure scalability and maintainability:
 
-1. **Presentation Layer**
-   - HTML5, CSS3, Bootstrap for responsive UI
-   - JavaScript for dynamic interactions
-   - Jinja2 templating engine
+ **Presentation Layer**
+    HTML5, CSS3, Bootstrap for responsive UI
+    JavaScript for dynamic interactions
+    Jinja2 templating engine
 
-2. **Application Layer**
-   - Flask framework with Blueprint structure
-   - WTForms for form validation
-   - Flask-Login for authentication
+ **Application Layer**
+    Flask framework with Blueprint structure
+    WTForms for form validation
+    Flask-Login for authentication
 
-3. **Business Logic Layer**
-   - Event management services
-   - User authentication and authorization
-   - ML recommendation engine
-   - Certificate generation service
-   - Email notification system
+ **Business Logic Layer**
+    Event management services
+    User authentication and authorization
+    ML recommendation engine
+    Certificate generation service
+    Email notification system
 
-4. **Data Layer**
-   - SQLAlchemy ORM
-   - SQLite database (development)
-   - Database migrations and seeding
+ **Data Layer**
+    SQLAlchemy ORM
+    SQLite database (development)
+    Database migrations and seeding
 
-5. **External Integrations**
-   - Email service integration
-   - PDF generation library
-   - Machine learning libraries
+ **External Integrations**
+    Email service integration
+    PDF generation library
+    Machine learning libraries
 
 ## 🗃️ Database Schema
 
 The database design supports the complete event management workflow:
 
 ### Core Tables
-- **Users** - Student and admin user information
-- **Events** - Event details, dates, locations, and metadata
-- **Registrations** - Event registration tracking
-- **Categories** - Event categorization system
-- **Certificates** - Generated certificate records
+ **Users** - Student and admin user information
+ **Events** - Event details, dates, locations, and metadata
+ **Registrations** - Event registration tracking
+ **Categories** - Event categorization system
+ **Certificates** - Generated certificate records
 
 ### Advanced Features Tables
-- **UserInteractions** - ML recommendation data
-- **EmailLogs** - Email notification tracking
-- **FAQResponses** - Chatbot interaction logs
-- **EventAnalytics** - Event performance metrics
+ **UserInteractions** - ML recommendation data
+ **EmailLogs** - Email notification tracking
+ **FAQResponses** - Chatbot interaction logs
+ **EventAnalytics** - Event performance metrics
 
 ## 🚀 Getting Started
 
@@ -125,13 +125,13 @@ Ensure you have the following installed:
 
 ### Installation
 
-1. **Clone the repository:**
+ **Clone the repository:**
 ```bash
 git clone https://github.com/DittoOne/Eventify.git
 cd Eventify
 ```
 
-2. **Create and activate virtual environment:**
+ **Create and activate virtual environment:**
 ```bash
 # Create virtual environment
 python -m venv eventify_env
@@ -143,11 +143,11 @@ eventify_env\Scripts\activate
 source eventify_env/bin/activate
 ```
 
-3. **Install dependencies:**
+ **Install dependencies:**
 ```bash
 pip install -r requirements.txt
 ```
-4. **Run the application:**
+ **Run the application:**
 ```bash
 # Development mode
 python app.py
@@ -156,7 +156,7 @@ python app.py
 gunicorn "app:create_app()"
 ```
 
-5. **Access the application:**
+ **Access the application:**
    - Open your browser and navigate to `http://localhost:5000`
 
 ## 🎥 Live Demo
@@ -168,24 +168,24 @@ gunicorn "app:create_app()"
 ## 🌟 Feature Highlights
 
 ### 🤖 AI-Powered Recommendation System
-- Content-based filtering using event categories and user preferences
-- Collaborative filtering based on registration patterns
-- Real-time suggestions on student dashboard
+ Content-based filtering using event categories and user preferences
+ Collaborative filtering based on registration patterns
+ Real-time suggestions on student dashboard
 
 ### 📜 Automated Certificate Generation
-- Custom PDF certificates with event branding
-- Automatic generation post-event completion
-- Digital signature and verification system
+ Custom PDF certificates with event branding
+ Automatic generation post-event completion
+ Digital signature and verification system
 
 ### 💬 Intelligent FAQ Chatbot
-- Rule-based response system
-- Common query handling
-- Integration with user support system
+ Rule-based response system
+ Common query handling
+ Integration with user support system
 
 ### 📊 Advanced Analytics
-- Event performance metrics
-- Registration trends analysis
-- User engagement insights
+ Event performance metrics
+ Registration trends analysis
+ User engagement insights
 
 ## 👨‍💻 Team
 
@@ -199,11 +199,11 @@ gunicorn "app:create_app()"
 
 We welcome contributions! Please follow these steps:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+ Fork the repository
+ Create a feature branch (`git checkout -b feature/AmazingFeature`)
+ Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+ Push to the branch (`git push origin feature/AmazingFeature`)
+ Open a Pull Request
 
 ## 📄 License
 
