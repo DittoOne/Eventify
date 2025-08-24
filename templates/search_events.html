@@ -10,7 +10,8 @@
     <!-- Main Search Bar with Filters -->
     <div class="card mb-4">
         <div class="card-body">
-            <form method="GET" action="{{ url_for('student.search_events') }}">
+            <!-- Replace the existing form action line with this dynamic one -->
+            <form method="GET" action="{{ url_for(user_type + '.search_events') }}">
                 <!-- Top Search Bar -->
                 <div class="row mb-3">
                     <div class="col-12">
@@ -96,10 +97,11 @@
                 <div class="card h-100 event-item">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <a href="{% if user_type == 'student' %}{{ url_for('student.event_detail', event_id=event.id) }}{% else %}{{ url_for('admin.event_detail', event_id=event.id) }}{% endif %}" 
-                               class="event-title-link text-decoration-none">
-                                {{ event.title }}
-                            </a>
+                            {% if user_type == 'student' %}
+                                <a href="{{ url_for('student.event_detail', event_id=event.id) }}">{{ event.title }}</a>
+                            {% else %}
+                                <a href="{{ url_for('admin.event_detail', event_id=event.id) }}">{{ event.title }}</a>
+                            {% endif %}
                         </h5>
                         <p class="card-text text-muted mb-3 event-info">
                             <i class="fas fa-calendar me-2"></i>{{ event.date.strftime('%B %d, %Y') }}
@@ -169,3 +171,8 @@
 {% block extra_js %}
 <script src="{{ url_for('static', filename='js/base.js') }}"></script>
 {% endblock %}
+
+<!-- Add this to your admin dashboard navigation -->
+<a href="{{ url_for('admin.search_events') }}" class="nav-link">
+    <i class="fas fa-search me-2"></i>Search Events
+</a>

@@ -5,6 +5,7 @@ from viewmodels.admin_viewmodel import AdminViewModel
 from datetime import datetime
 import os
 from models import db
+from models.event import Event
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -28,19 +29,19 @@ def create_event():
         description = request.form['description']
         
         # Parse start date and time
-        start_date = datetime.strptime(request.form['start_date'], '%Y-%m-%d').date()
-        start_time = datetime.strptime(request.form['start_time'], '%H:%M').time()
+        start_date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
+        start_time = datetime.strptime(request.form['time'], '%H:%M').time()
         
         # Parse end date and time
-        end_date = datetime.strptime(request.form['end_date'], '%Y-%m-%d').date()
-        end_time = datetime.strptime(request.form['end_time'], '%H:%M').time()
+        end_date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
+        end_time = datetime.strptime(request.form['time'], '%H:%M').time()
         
         location = request.form['location']
         category = request.form['category']
         max_capacity = int(request.form['max_capacity'])
         
         success, message = AdminViewModel.create_event(
-            title, description, start_date, start_time, end_date, end_time,
+            title, description, start_date, start_time,
             location, category, max_capacity, current_user
         )
         
@@ -53,7 +54,6 @@ def create_event():
 
 @admin_bp.route('/edit-event/<int:event_id>', methods=['GET', 'POST'])
 def edit_event(event_id):
-    from models.event import Event
     event = Event.query.get_or_404(event_id)
     
     # Check if current admin owns this event
@@ -78,7 +78,7 @@ def edit_event(event_id):
         max_capacity = int(request.form['max_capacity'])
         
         success, message = AdminViewModel.update_event(
-            event_id, title, description, start_date, start_time, end_date, end_time,
+            event_id, title, description, start_date, start_time, 
             location, category, max_capacity
         )
         
@@ -91,7 +91,6 @@ def edit_event(event_id):
 
 @admin_bp.route('/delete-event/<int:event_id>', methods=['POST'])
 def delete_event(event_id):
-    from models.event import Event
     event = Event.query.get_or_404(event_id)
     
     # Check if current admin owns this event
@@ -106,7 +105,6 @@ def delete_event(event_id):
 
 @admin_bp.route('/event-attendees/<int:event_id>')
 def event_attendees(event_id):
-    from models.event import Event
     event = Event.query.get_or_404(event_id)
     
     # Check if current admin owns this event
@@ -138,29 +136,46 @@ def profile():
         return redirect(url_for('admin.profile'))
 
     return render_template('admin/profile.html', user=current_user)
-@admin_bp.route('/events/search')
-@login_required
+
+@admin_bp.route('/search')
 def search_events():
     search_query = request.args.get('q', '')
-    category = request.args.get('category', 'all')
-    date = request.args.get('date')
-    
-    # Convert date strings to date objects if provided
-    if date:
-        date = datetime.strptime(date, '%Y-%m-%d').date()
-    
-        
-    events = AdminViewModel.search_events(
-        search_query=search_query,
-        category=category,
-        date=date,
-    )
-    
+    selected_category = request.args.get('category', 'all')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    location = request.args.get('location')
+    time = request.args.get('time')
+
+    # Start with base query
+    query = Event.query
+
+    # Apply filters
+    if search_query:
+        query = query.filter(Event.title.ilike(f'%{search_query}%'))
+    if selected_category != 'all':
+        query = query.filter(Event.category == selected_category)
+    if start_date:
+        query = query.filter(Event.date >= datetime.strptime(start_date, '%Y-%m-%d'))
+    if end_date:
+        query = query.filter(Event.date <= datetime.strptime(end_date, '%Y-%m-%d'))
+    if location:
+        query = query.filter(Event.location.ilike(f'%{location}%'))
+    if time:
+        query = query.filter(Event.time.ilike(f'%{time}%'))
+
+    events = query.order_by(Event.date.desc()).all()
+
     return render_template('search_events.html',
-                      search_query=search_query,
-                      events=events,
-                      selected_category=category,
-                      date=date,
-                     #search_events='search_events',  # Add this
-                     #event_detail_route='student.event_detail'
-                     )
+                         events=events,
+                         search_query=search_query,
+                         selected_category=selected_category,
+                         start_date=start_date,
+                         end_date=end_date,
+                         location=location,
+                         time=time,
+                         user_type='admin')
+
+@admin_bp.route('/event/<int:event_id>')
+def event_detail(event_id):
+    event = Event.query.get_or_404(event_id)
+    return render_template('admin/event_detail.html', event=event)
