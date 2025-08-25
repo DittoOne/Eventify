@@ -79,7 +79,7 @@ class StudentViewModel:
         """Get all past events that the user was registered for"""
         now = datetime.now()
         return [event for event in StudentViewModel.get_user_registered_events(user)
-                if datetime.combine(event.date, event.time) <= now]
+                if datetime.combine(event.start_date, event.start_time) <= now]
     
     @staticmethod
     def get_ongoing_events():

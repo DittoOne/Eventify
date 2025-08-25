@@ -59,3 +59,65 @@
     transform: translateY(-1px);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
+
+/* Make basic text white */
+body,
+.card,
+.card-body,
+.card-title,
+.card-text,
+h1, h2, h3, h4, h5, h6,
+p,
+span,
+li,
+td,
+th {
+    color: #fff !important;
+}
+
+/* Optionally, make sure links are visible on dark backgrounds */
+a {
+    color: #aad8ff !important;
+}
+
+/* Sidebar Admin Panel links: deeper color */
+.list-group-item {
+    color: #183153 !important; /* deep blue shade */
+    background-color: #fff !important;
+    font-weight: 500;
+}
+
+.list-group-item.active {
+    color: #fff !important;
+    background-color: #183153 !important;
+    border-color: #183153 !important;
+}
+
+/* Make table text under "My Events" black */
+.table,
+.table th,
+.table td,
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    color: #222 !important;
+    background-color: #fff !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(even) > * {
+    background-color: #f8f9fa !important;
+    color: #222 !important;
+}
+
+/* Registered column links: deeper color */
+.table td a {
+    color: #183153 !important;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* Make "no attendees" alert background deeper for better readability */
+.alert-info.no-results-alert,
+.alert-info.no-attendees-alert {
+    background-color: #3a4a5a !important; /* deeper blue-gray */
+    color: #fff !important;
+    border-color: #2c3948 !important;
+}

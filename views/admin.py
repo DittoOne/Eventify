@@ -29,6 +29,7 @@ def create_event():
     if request.method == 'POST':
         title = request.form.get('title', '')
         description = request.form.get('description', '')
+        print(description)
         start_date_str = request.form.get('start_date', '')
         end_date_str = request.form.get('end_date', '')
         start_time_str = request.form.get('start_time', '')

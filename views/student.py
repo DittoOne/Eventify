@@ -215,12 +215,12 @@ def debug_recommendations():
     user_event_ids = [e.id for e in current_user.registered_events]
     if user_event_ids:
         available_events = Event.query.filter(
-            Event.date >= date.today(),
+            Event.start_date >= date.today(),
             not_(Event.id.in_(user_event_ids))
         ).limit(10).all()
     else:
         available_events = Event.query.filter(
-            Event.date >= date.today()
+            Event.start_date >= date.today()
         ).limit(10).all()
     
     debug_info['available_events'] = available_events
