@@ -77,6 +77,12 @@
     color: var(--primary-hover);
 }
 
+/* Make recent registrations text under Trending Events lighter */
+.trending-item .text-success {
+    color: #b6fcd5 !important; /* light mint green */
+    font-weight: 500;
+}
+
 /* Sidebar Navigation */
 .list-group-item {
     background: transparent;

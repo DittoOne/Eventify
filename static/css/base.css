@@ -192,3 +192,58 @@ body {
     color: #ffb800; /* make sparkle icon stand out */
     font-size: 1.75rem;
 }
+
+/* Make basic text and icons white in search events */
+body,
+.card,
+.card-body,
+.card-title,
+.card-text,
+h1, h2, h3, h4, h5, h6,
+p,
+span,
+li,
+td,
+th,
+.event-info,
+.event-meta,
+.event-item,
+.event-item i,
+.event-item .fa,
+.event-item .fas {
+    color: #fff !important;
+}
+
+/* Edit button: bright gold */
+.btn-outline-warning {
+    color: #ffd700 !important;           /* Bright gold */
+    border-color: #ffd700 !important;
+    background-color: transparent !important;
+}
+.btn-outline-warning:hover, .btn-outline-warning:focus {
+    background-color: #ffd700 !important;
+    color: #222 !important;              /* Dark text on gold */
+    border-color: #ffd700 !important;
+}
+
+/* View button: vivid cyan */
+.btn-outline-info {
+    color: #00e6ff !important;           /* Bright cyan */
+    border-color: #00e6ff !important;
+    background-color: transparent !important;
+}
+.btn-outline-info:hover, .btn-outline-info:focus {
+    background-color: #00e6ff !important;
+    color: #222 !important;              /* Dark text on cyan */
+    border-color: #00e6ff !important;
+}
+
+/* Make icons inside Edit and View buttons match the text color */
+.btn-outline-warning i,
+.btn-outline-warning .fa,
+.btn-outline-warning .fas,
+.btn-outline-info i,
+.btn-outline-info .fa,
+.btn-outline-info .fas {
+    color: inherit !important;
+}

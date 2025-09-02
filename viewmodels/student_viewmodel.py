@@ -22,7 +22,6 @@ class StudentViewModel:
     @staticmethod
     def register_for_event(user, event_id):
         """Register user for an event"""
-        send_event_registration_email(user.email, Event.query.get(event_id))
         try:
             event = Event.query.get_or_404(event_id)
             
@@ -41,6 +40,10 @@ class StudentViewModel:
             # Register user
             event.registered_users.append(user)
             db.session.commit()
+            
+            # Send confirmation email after successful registration
+            send_event_registration_email(user.email, event)
+            
             return True, "Successfully registered for the event"
         except Exception as e:
             db.session.rollback()
@@ -79,15 +82,23 @@ class StudentViewModel:
         """Get all past events that the user was registered for"""
         now = datetime.now()
         return [event for event in StudentViewModel.get_user_registered_events(user)
-                if datetime.combine(event.date, event.time) <= now]
+                if datetime.combine(event.start_date, event.start_time) <= now]
     
     @staticmethod
     def get_ongoing_events():
         """Get all events that are currently happening"""
         now = datetime.now()
+        current_time = now.time()
+        current_date = now.date()
+        
+        # Events that started today and haven't ended yet
         return Event.query.filter(
-            Event.start_date == now.date(),
-            Event.start_time <= now.time()
+            Event.start_date == current_date,
+            Event.start_time <= current_time,
+            or_(
+                Event.end_date > current_date,
+                and_(Event.end_date == current_date, Event.end_time >= current_time)
+            )
         ).all()
     
     @staticmethod
@@ -107,7 +118,7 @@ class StudentViewModel:
         stats = {
             'total_registered': len(registered_events),
             'upcoming_events': sum(1 for e in registered_events if e.start_date >= today),
-            'events_this_month': sum(1 for e in registered_events if e.start_date.month == today.month),
+            'events_this_month': sum(1 for e in registered_events if e.start_date.month == today.month and e.start_date.year == today.year),
             'categories': {}
         }
         
@@ -125,9 +136,9 @@ class StudentViewModel:
         """Get events filtered by category"""
         today = date.today()
         return Event.query.filter(
-            Event.date >= today,
+            Event.start_date >= today,
             Event.category == category
-        ).order_by(Event.date, Event.time).all()
+        ).order_by(Event.start_date, Event.start_time).all()
     
     @staticmethod
     def search_events(search_query=None, category=None, start_date=None, end_date=None):
@@ -157,7 +168,6 @@ class StudentViewModel:
             
         # Order by date and time
         return query.order_by(Event.start_date, Event.start_time).all()
-        return query.order_by(Event.date, Event.time).all()
     
     # Enhanced recommendation methods with debugging
     @staticmethod
@@ -176,6 +186,8 @@ class StudentViewModel:
             return recommendations
         except Exception as e:
             print(f"Error getting recommendations: {e}")
+            import traceback
+            traceback.print_exc()
             # Fallback: return some upcoming events
             return StudentViewModel._get_fallback_recommendations(user, limit)
     
@@ -188,10 +200,12 @@ class StudentViewModel:
             return trending
         except Exception as e:
             print(f"Error getting trending events: {e}")
+            import traceback
+            traceback.print_exc()
             # Fallback: return recent events
             upcoming_events = Event.query.filter(
-                Event.date >= date.today()
-            ).order_by(Event.date).limit(limit).all()
+                Event.start_date >= date.today()
+            ).order_by(Event.start_date).limit(limit).all()
             
             return [{'event': event, 'registration_count': len(event.registered_users)} 
                    for event in upcoming_events]
@@ -204,10 +218,12 @@ class StudentViewModel:
         
         from sqlalchemy import not_
         
-        upcoming_events = Event.query.filter(
-            Event.date >= date.today(),
-            not_(Event.id.in_(user_event_ids)) if user_event_ids else True
-        ).order_by(Event.date).limit(limit).all()
+        query = Event.query.filter(Event.start_date >= date.today())
+        
+        if user_event_ids:
+            query = query.filter(not_(Event.id.in_(user_event_ids)))
+        
+        upcoming_events = query.order_by(Event.start_date).limit(limit).all()
         
         return [{
             'event': event,

@@ -5,25 +5,30 @@
 <link href="{{ url_for('static', filename='css/student.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
 <style>
-    .recommendation-card, .trending-item {
+    .recommendation-card,
+    .trending-item {
         transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-left-width 0.2s ease-in-out;
         cursor: pointer;
         border-left: 4px solid transparent;
     }
+
     .recommendation-card:hover {
         transform: translateY(-3px);
         box-shadow: 0 6px 15px rgba(0, 123, 255, 0.15);
         text-decoration: none;
         border-left-color: #007bff;
     }
+
     .trending-item:hover {
         background-color: #f8f9fa;
         border-left-width: 5px;
     }
+
     .recommendation-score {
         font-size: 0.85rem;
         opacity: 0.8;
     }
+
     .card-header small {
         display: block;
         font-weight: 400;
@@ -51,10 +56,12 @@
                     <a href="{{ url_for('student.search_events') }}" class="list-group-item list-group-item-action">
                         <i class="fas fa-search me-2"></i>Search Events
                     </a>
-                    <a href="{{ url_for('student.recommendations') }}" class="list-group-item list-group-item-action active">
+                    <a href="{{ url_for('student.recommendations') }}"
+                        class="list-group-item list-group-item-action active">
                         <i class="fas fa-magic me-2"></i>Recommendations
                     </a>
-                    <a href="{{ url_for('student.debug_recommendations') }}" class="list-group-item list-group-item-action text-warning">
+                    <a href="{{ url_for('student.debug_recommendations') }}"
+                        class="list-group-item list-group-item-action text-warning">
                         <i class="fas fa-bug me-2"></i>Debug Recommendations
                     </a>
                 </div>
@@ -80,40 +87,45 @@
                         </div>
                         <div class="card-body p-0">
                             {% if recommendations %}
-                                {% for rec in recommendations %}
-                                <a href="{{ url_for('student.event_detail', event_id=rec.event.id) }}" 
-                                   class="recommendation-card d-block p-3 border-bottom text-decoration-none text-dark">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-8">
-                                            <h6 class="mb-1 text-primary">{{ rec.event.title }}</h6>
-                                            <p class="mb-1 text-muted small">{{ rec.reason }}</p>
-                                            <div class="d-flex flex-wrap gap-2 align-items-center">
-                                                <span class="badge bg-info">{{ rec.event.category }}</span>
-                                                <small class="text-muted">
-                                                    <i class="fas fa-calendar me-1"></i>{{ rec.event.date.strftime('%b %d, %Y') }}
-                                                </small>
-                                                <small class="text-muted">
-                                                    <i class="fas fa-clock me-1"></i>{{ rec.event.time.strftime('%I:%M %p') }}
-                                                </small>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 text-end">
-                                            <div class="recommendation-score mb-2">Score: {{ "%.2f"|format(rec.score) }}</div>
-                                            <div class="text-muted small"><i class="fas fa-map-marker-alt me-1"></i>{{ rec.event.location }}</div>
-                                            <div class="text-muted small"><i class="fas fa-users me-1"></i>{{ rec.event.registration_count }}/{{ rec.event.max_capacity }}</div>
+                            {% for rec in recommendations %}
+                            <a href="{{ url_for('student.event_detail', event_id=rec.event.id) }}"
+                                class="recommendation-card d-block p-3 border-bottom text-decoration-none text-dark">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h6 class="mb-1 text-primary">{{ rec.event.title }}</h6>
+                                        <p class="mb-1 text-muted small">{{ rec.reason }}</p>
+                                        <div class="d-flex flex-wrap gap-2 align-items-center">
+                                            <span class="badge bg-info">{{ rec.event.category }}</span>
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar me-1"></i>{{ rec.event.start_date.strftime('%b
+                                                %d, %Y') }}
+                                            </small>
+                                            <small class="text-muted">
+                                                <i class="fas fa-clock me-1"></i>{{ rec.event.start_time.strftime('%I:%M
+                                                %p') }}
+                                            </small>
                                         </div>
                                     </div>
-                                </a>
-                                {% endfor %}
-                            {% else %}
-                                <div class="p-4 text-center">
-                                    <i class="fas fa-magic fa-3x text-muted mb-3"></i>
-                                    <h5 class="text-muted">No Recommendations Yet</h5>
-                                    <p class="text-muted">Register for some events to get personalized recommendations!</p>
-                                    <a href="{{ url_for('student.search_events') }}" class="btn btn-primary">
-                                        <i class="fas fa-search me-2"></i>Find Events
-                                    </a>
+                                    <div class="col-md-4 text-end">
+                                        <div class="recommendation-score mb-2">Score: {{ "%.2f"|format(rec.score) }}
+                                        </div>
+                                        <div class="text-muted small"><i class="fas fa-map-marker-alt me-1"></i>{{
+                                            rec.event.location }}</div>
+                                        <div class="text-muted small"><i class="fas fa-users me-1"></i>{{
+                                            rec.event.registration_count }}/{{ rec.event.max_capacity }}</div>
+                                    </div>
                                 </div>
+                            </a>
+                            {% endfor %}
+                            {% else %}
+                            <div class="p-4 text-center">
+                                <i class="fas fa-magic fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">No Recommendations Yet</h5>
+                                <p class="text-muted">Register for some events to get personalized recommendations!</p>
+                                <a href="{{ url_for('student.search_events') }}" class="btn btn-primary">
+                                    <i class="fas fa-search me-2"></i>Find Events
+                                </a>
+                            </div>
                             {% endif %}
                         </div>
                     </div>
@@ -128,22 +140,24 @@
                         </div>
                         <div class="card-body p-0">
                             {% if trending_events %}
-                                {% for trend in trending_events %}
-                                <a href="{{ url_for('student.event_detail', event_id=trend.event.id) }}" 
-                                   class="trending-item d-block p-3 border-bottom text-decoration-none text-dark">
-                                    <h6 class="mb-1">{{ trend.event.title }}</h6>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-success"><i class="fas fa-trending-up me-1"></i>{{ trend.registration_count }} registrations</small>
-                                        <span class="badge bg-secondary">{{ trend.event.category }}</span>
-                                    </div>
-                                    <small class="text-muted d-block mt-1"><i class="fas fa-calendar me-1"></i>{{ trend.event.date.strftime('%b %d') }}</small>
-                                </a>
-                                {% endfor %}
-                            {% else %}
-                                <div class="p-4 text-center">
-                                    <i class="fas fa-chart-line fa-2x text-muted mb-2"></i>
-                                    <p class="text-muted mb-0">No trending events found</p>
+                            {% for trend in trending_events %}
+                            <a href="{{ url_for('student.event_detail', event_id=trend.event.id) }}"
+                                class="trending-item d-block p-3 border-bottom text-decoration-none text-dark">
+                                <h6 class="mb-1">{{ trend.event.title }}</h6>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-success"><i class="fas fa-trending-up me-1"></i>{{
+                                        trend.registration_count }} registrations</small>
+                                    <span class="badge bg-secondary">{{ trend.event.category }}</span>
                                 </div>
+                                <small class="text-muted d-block mt-1"><i class="fas fa-calendar me-1"></i>{{
+                                    trend.event.start_date.strftime('%b %d') }}</small>
+                            </a>
+                            {% endfor %}
+                            {% else %}
+                            <div class="p-4 text-center">
+                                <i class="fas fa-chart-line fa-2x text-muted mb-2"></i>
+                                <p class="text-muted mb-0">No trending events found</p>
+                            </div>
                             {% endif %}
                         </div>
                     </div>
@@ -168,32 +182,36 @@
             </div>
 
             <!-- Additional Actions -->
-            <div class="mt-4">
-                <div class="card shadow-sm bg-light">
-                    <div class="card-body text-center py-3">
-                        <h6 class="mb-3">Explore More</h6>
-                        <div class="btn-group" role="group">
-                            <a href="{{ url_for('student.events') }}" class="btn btn-outline-primary"><i class="fas fa-calendar me-2"></i>All Events</a>
-                            <a href="{{ url_for('student.search_events') }}" class="btn btn-outline-secondary"><i class="fas fa-search me-2"></i>Search Events</a>
-                            <a href="{{ url_for('student.my_events') }}" class="btn btn-outline-info"><i class="fas fa-user-calendar me-2"></i>My Events</a>
-                        </div>
-                    </div>
+
+        </main>
+    </div>
+    <div class="mt-4">
+        <div class="card shadow-sm bg-light">
+            <div class="card-body text-center py-3">
+                <h6 class="mb-3">Explore More</h6>
+                <div class="btn-group" role="group">
+                    <a href="{{ url_for('student.events') }}" class="btn btn-outline-primary"><i
+                            class="fas fa-calendar me-2"></i>All Events</a>
+                    <a href="{{ url_for('student.search_events') }}" class="btn btn-outline-secondary"><i
+                            class="fas fa-search me-2"></i>Search Events</a>
+                    <a href="{{ url_for('student.my_events') }}" class="btn btn-outline-info"><i
+                            class="fas fa-user-calendar me-2"></i>My Events</a>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.recommendation-card').forEach(card => {
-        card.addEventListener('click', () => console.log('Recommendation clicked:', card.href));
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.recommendation-card').forEach(card => {
+            card.addEventListener('click', () => console.log('Recommendation clicked:', card.href));
+        });
+        document.querySelectorAll('.trending-item').forEach(item => {
+            item.addEventListener('click', () => console.log('Trending event clicked:', item.href));
+        });
     });
-    document.querySelectorAll('.trending-item').forEach(item => {
-        item.addEventListener('click', () => console.log('Trending event clicked:', item.href));
-    });
-});
 </script>
 {% endblock %}

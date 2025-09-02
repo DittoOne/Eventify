@@ -19,7 +19,7 @@
                         <strong>{{ event.title }}</strong><br>
                         <small class="text-muted">
                             <i class="fas fa-layer-group me-1"></i>{{ event.category }} | 
-                            <i class="fas fa-calendar-alt me-1"></i>{{ event.date.strftime('%Y-%m-%d') }}
+                            <i class="fas fa-calendar-alt me-1"></i>{{ event.start_date.strftime('%Y-%m-%d') }}
                         </small>
                     </div>
                     {% else %}
@@ -42,7 +42,7 @@
                         <strong>{{ event.title }}</strong><br>
                         <small class="text-muted">
                             <i class="fas fa-layer-group me-1"></i>{{ event.category }} | 
-                            <i class="fas fa-calendar-alt me-1"></i>{{ event.date.strftime('%Y-%m-%d') }}
+                            <i class="fas fa-calendar-alt me-1"></i>{{ event.start_date.strftime('%Y-%m-%d') }}
                         </small>
                     </div>
                     {% else %}

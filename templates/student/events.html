@@ -46,7 +46,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ event.title }}</h5>
                     <p class="card-text">
-                        {{ event.description[:100] }}{% if event.description|length > 100 %}...{% endif %}
+                        {{ event.description[:100]|safe }}{% if event.description|length > 100 %}...{% endif %}
                     </p>
                     <p class="mb-1"><i class="fas fa-calendar"></i> {{ event.start_date.strftime('%B %d, %Y') }}</p>
                     <p class="mb-1"><i class="fas fa-clock"></i> {{ event.start_time.strftime('%I:%M %p') }}</p>

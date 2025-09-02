@@ -8,6 +8,7 @@ from views.student import student_bp
 from views.admin import admin_bp
 from extensions import mail  # import here
 from utils.certificate_generator import CertificateGenerator
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
